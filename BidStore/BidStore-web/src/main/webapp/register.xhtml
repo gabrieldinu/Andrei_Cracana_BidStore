@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+  	  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+	<ui:composition template="/WEB-INF/templates/masterTemplate.xhtml">
+		<ui:define name="content">
+			<div id="center-box">
+				<h:form>
+				    <p:panel header="REGISTER">
+				    
+				        <p:messages />
+				 
+				        <h:panelGrid columns="2" cellpadding="5">
+				        
+				            <h:outputLabel for="name" value="First name:" />
+				            <p:inputText id="name" value="#{vvRegisterBean.name}" label="Name" pt:required="true" />
+				 
+				            <h:outputLabel for="surname" value="Last name:" />
+				            <p:inputText id="surname" value="#{vvRegisterBean.surname}" label="Surname" pt:required="true" />
+				 
+				            <h:outputLabel for="email" value="Email address:" />
+				            <p:inputText id="email" value="#{vvRegisterBean.email}" label="Email" pt:required="true" />
+				 
+				            <h:outputLabel for="user" value="Username:" />
+				            <p:inputText id="user" value="#{vvRegisterBean.user}" label="User" pt:required="true" />
+				 
+				            <h:outputLabel for="password" value="Password:" />
+				            <p:inputText type="password" id="password" value="#{vvRegisterBean.password}" label="Password" pt:required="true" />
+				 
+<!-- 				            <h:outputLabel for="password" value="Repeat password:"/>                                 -->
+<!-- 				            <p:inputText id="password" value="#{vvRegisterBean.password}" label="Password" /> -->
+				 
+				        </h:panelGrid>
+				 
+				        <p:commandButton action="#{vvRegisterBean.register}" value="Register" ajax="false" icon="ui-icon-check" validateClient="true"/>
+				        
+				        <f:facet name="footer">
+				    		or if you already have an account <p:link value="LOGIN" outcome="/login.xhtml" />
+				    	</f:facet>
+				    </p:panel>
+				</h:form>
+			</div>
+		</ui:define>
+	</ui:composition>
+</html>

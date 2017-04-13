@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+  	  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+	<ui:composition template="/WEB-INF/templates/masterTemplate.xhtml">
+		<ui:define name="content">
+			<div id="center-box">
+				<h:form>
+				    <p:panel header="LOGIN">
+				    
+				        <p:messages />
+				 
+				        <h:panelGrid columns="2" cellpadding="5">
+				        
+				            <h:outputLabel for="username" value="Username:" title="Insert your BIDSTORE username" />
+				            <p:inputText id="username" value="#{vvLoginBean.username}" label="Userame" pt:required="true" />
+				 
+				            <h:outputLabel for="password" value="Password:" title="Insert your associated password" />
+				            <p:inputText type="password" id="password" value="#{vvLoginBean.password}" label="Password" pt:required="true" />
+				 
+				        </h:panelGrid>
+				 
+				        <p:commandButton action="#{vvLoginBean.login}" value="Login" ajax="false" icon="ui-icon-check" validateClient="true" title="Confirm your credentials" />
+				        
+				        <f:facet name="footer">
+				    		or if you don't have an account <p:link value="REGISTER" outcome="/register.xhtml" />
+				    	</f:facet>
+				    </p:panel>
+				</h:form>
+			</div>
+		</ui:define>
+	</ui:composition>
+</html>
