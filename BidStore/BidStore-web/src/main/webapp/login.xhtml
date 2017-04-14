@@ -24,7 +24,7 @@
 				 
 				        </h:panelGrid>
 				 
-				        <p:commandButton action="#{vvLoginBean.login}" value="Login" ajax="false" icon="ui-icon-check" validateClient="true" title="Confirm your credentials" />
+				        <p:commandButton action="#{userController.loginUser}" value="Login" ajax="false" icon="ui-icon-check" validateClient="true" title="Confirm your credentials" />
 				        
 				        <f:facet name="footer">
 				    		or if you don't have an account <p:link value="REGISTER" outcome="/register.xhtml" />

@@ -1,6 +1,5 @@
 package ro.fortech.BidStore.model;
 
-import java.io.Serializable;
 import javax.persistence.*;
 
 
@@ -10,12 +9,13 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="table_login")
-@NamedQuery(name="Login.findAll", query="SELECT l FROM Login l")
-public class Login implements Serializable {
-	private static final long serialVersionUID = 1L;
+@NamedQuery(name=Login.FIND_BY_USERNAME, query="SELECT l FROM Login l WHERE l.user = :username")
+public class Login {
+	
+	public static final String FIND_BY_USERNAME = "Login.findByUsername";
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="login_id")
 	private int Id;
 
@@ -32,7 +32,8 @@ public class Login implements Serializable {
 	private String user;
 
 	//bi-directional one-to-one association to Profile
-	@OneToOne(mappedBy="tableLogin")
+	@OneToOne(cascade=CascadeType.ALL)
+	@PrimaryKeyJoinColumn
 	private Profile tableProfile;
 
 	public Login() {
@@ -85,5 +86,4 @@ public class Login implements Serializable {
 	public void setTableProfile(Profile tableProfile) {
 		this.tableProfile = tableProfile;
 	}
-
 }

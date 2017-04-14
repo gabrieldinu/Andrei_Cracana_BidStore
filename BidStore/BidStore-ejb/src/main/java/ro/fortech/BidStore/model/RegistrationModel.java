@@ -1,20 +1,10 @@
-package ro.fortech.BidStore.validationBeans;
+package ro.fortech.BidStore.model;
 
-import java.io.Serializable;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.ejb.Stateless;
 
-@Named(value="vvRegisterBean")
-@SuppressWarnings("serial")
-@RequestScoped
-public class RegisterBean implements Serializable {
-	
-	@Inject
-    private FacesContext facesContext;
+@Stateless
+public class RegistrationModel {
 
-//REGISTER fields start
 	private String name;
 	
 	private String surname;
@@ -24,8 +14,7 @@ public class RegisterBean implements Serializable {
 	private String user;
 	
 	private String password;
-//REGISTER fields end
-	
+
 	public String getName() {
 		return name;
 	}
