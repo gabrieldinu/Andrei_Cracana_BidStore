@@ -1,5 +1,6 @@
 package ro.fortech.BidStore.service;
 
+import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -33,7 +34,16 @@ public class RegistrationService {
 		        sb.append(c);
 		    }
 		    return sb.toString();
-		}
+	 }
+	 
+	 private void sendEmail(String email) {
+		 	String to = email;
+		 	String from = "BidStoreEmail";
+		 	String host = "localhost";
+		 	Properties properties = System.getProperties();
+		 	properties.setProperty("mail.smtp.host", host);
+		 	//implement email sending, misssing Mail API, can't create Session
+	 }
     
 	 public boolean register(RegistrationModel registrationModel) {
     	log.info("Registering new member!");
@@ -62,6 +72,9 @@ public class RegistrationService {
     		e.printStackTrace();
     		return false;
     	}
+    	
+    	sendEmail(profileEntity.getEmail());
+    	
     	return true;
 	 }
 	 
