@@ -4,7 +4,6 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -15,14 +14,21 @@ import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import ro.fortech.BidStore.model.Login;
 import ro.fortech.BidStore.model.Profile;
-import ro.fortech.BidStore.model.RegistrationModel;
+import ro.fortech.BidStore.model.RegistrationModelREST;
 
-@Stateless
-public class RegistrationService {
-
+@Path("/registration")
+public class RegistrationServiceREST {
+	
 	 @Inject
 	 private Logger log;
 
@@ -54,7 +60,8 @@ public class RegistrationService {
 		 return content;
 	 }
 	 
-	 private void sendEmail(Login loginEntity) {
+	 @SuppressWarnings("unused")
+	private void sendEmail(Login loginEntity) {
 		 	String to = loginEntity.getTableProfile().getEmail();
 		 	String from = "andrei91c@gmail.com";
 //		 	String host = "localhost";
@@ -77,8 +84,13 @@ public class RegistrationService {
 		 	}
 	 }
 	 
-	 public boolean register(RegistrationModel registrationModel) {
-    	log.info("Registering new member!");
+	 @POST
+	 @Path("/register")
+	 @Consumes(MediaType.APPLICATION_XML)
+	 @Produces(MediaType.TEXT_PLAIN)
+	 @Transactional
+	 public boolean register(RegistrationModelREST registrationModel) {
+    	log.info("Registering new member with REST!");
     	//create new login user
     	Login loginEntity = new Login();
     	
@@ -105,25 +117,31 @@ public class RegistrationService {
     		return false;
     	}
     	
-    	sendEmail(loginEntity);
+    	//sendEmail(loginEntity);
     	
     	return true;
 	 }
 	 
-	 public String login(String username, String password) {
+	 @POST
+	 @Path("/login")
+	 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	 @Produces(MediaType.TEXT_PLAIN)
+	 @Transactional
+	 public String login(@FormParam("username")String username, @FormParam("password")String password) {
+		 log.info("Login with REST! + username="+username+" + password="+password+" <<<");
 		 TypedQuery<Login> verifyQuery = em.createNamedQuery(Login.FIND_BY_USERNAME, Login.class);
 		 verifyQuery.setParameter("username", username);
 		 
 		 try 
 		 {
 			 Login loginToVerify = verifyQuery.getSingleResult();
-			 if (!loginToVerify.getChecked()) return "Your email has not been verified!";
-			 if (!loginToVerify.getPass().equals(password)) return "Your password is incorect!";
+			 if (!loginToVerify.getChecked()) return "Your email has not been verified! REST";
+			 if (!loginToVerify.getPass().equals(password)) return "Your password is incorect! REST";
 			 return "";
 		 }
 		 catch (NoResultException e) {
 			 e.printStackTrace();
-			 return "Username not found!";
+			 return "Username not found! REST";
 		 }
 	 }
 	 

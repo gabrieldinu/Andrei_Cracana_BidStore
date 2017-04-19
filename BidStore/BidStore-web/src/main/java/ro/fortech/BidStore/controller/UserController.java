@@ -4,12 +4,18 @@ import java.io.Serializable;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
 
 import ro.fortech.BidStore.model.RegistrationModel;
+import ro.fortech.BidStore.rest.RegistrationModelREST;
 import ro.fortech.BidStore.service.RegistrationService;
 import ro.fortech.BidStore.validationBeans.LoginBean;
 import ro.fortech.BidStore.validationBeans.RegisterBean;
@@ -33,6 +39,57 @@ public class UserController implements Serializable {
 	
 	@Inject
 	private RegistrationService registrationService;
+	
+	@Inject 
+	RegistrationModelREST registrationModelREST;
+	
+	Client restClient = ClientBuilder.newClient();
+	
+	public String registerUserREST() {
+		
+		registrationModelREST.setName(registerBean.getName());
+		registrationModelREST.setSurname(registerBean.getSurname());
+		registrationModelREST.setEmail(registerBean.getEmail());
+		registrationModelREST.setUser(registerBean.getUser());
+		registrationModelREST.setPassword(registerBean.getPassword());
+
+		WebTarget registrationServiceREST = restClient.target("http://localhost:8080//BidStore-web/rest/registration/register");
+		
+		String registerResponse = registrationServiceREST.request(MediaType.TEXT_PLAIN).post(Entity.entity(registrationModelREST, MediaType.APPLICATION_XML),String.class);
+		
+		if (registerResponse.equalsIgnoreCase("true")) 
+		{
+			facesContext.addMessage(null, new FacesMessage("REST Register succeded! An email has been sent to you in order to confirm your account!"));
+			return "login";
+		}
+		else {
+			facesContext.addMessage(null, new FacesMessage("REST Register failed! Please try again!"));
+			return "register";
+		}
+	}
+	
+	public String loginUserREST() {
+		
+		WebTarget registrationServiceREST = restClient.target("http://localhost:8080//BidStore-web/rest/registration/login");
+		
+//		registrationServiceREST.queryParam("username", loginBean.getUsername());
+//		registrationServiceREST.queryParam("password", loginBean.getPassword());
+		
+		Form loginForm = new Form();
+		loginForm.param("username", loginBean.getUsername());
+		loginForm.param("password", loginBean.getPassword());
+		
+		String loginResponse = registrationServiceREST.request(MediaType.TEXT_PLAIN).post(Entity.form(loginForm), String.class);
+		
+		if (loginResponse.equals("")) {
+			return "index";
+		}
+		else {
+			facesContext.addMessage(null, new FacesMessage(loginResponse));
+			return "login";
+		}
+
+	}
 	
 	public String registerUser() {
 		registrationModel.setName(registerBean.getName());

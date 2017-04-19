@@ -23,7 +23,7 @@
    <!-- The datasource is bound into JNDI at this location. We reference 
       this in META-INF/persistence.xml -->
     <datasource jndi-name="java:jboss/datasources/BidStoreDS" pool-name="BidStore"
-        enabled="true" use-java-context="true">
+        enabled="true" use-java-context="true" jta="true">
         <connection-url>jdbc:mysql://localhost:3306/bidstore-db</connection-url>
 		<driver-class>com.mysql.cj.jdbc.Driver</driver-class>
 		<driver>BidStore-ear.ear_com.mysql.cj.jdbc.Driver_6_0</driver>

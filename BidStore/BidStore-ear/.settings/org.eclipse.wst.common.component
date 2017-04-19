@@ -8,6 +8,15 @@
         <dependent-module archiveName="BidStore-ejb.jar" deploy-path="/" handle="module:/resource/BidStore-ejb/BidStore-ejb">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="javax.transaction-api.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/javax/transaction/javax.transaction-api/1.2/javax.transaction-api-1.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="javax.ws.rs-api.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/javax/ws/rs/javax.ws.rs-api/2.0.1/javax.ws.rs-api-2.0.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="javax.mail-api.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/javax/mail/javax.mail-api/1.5.6/javax.mail-api-1.5.6.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="mysql-connector-java.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/mysql/mysql-connector-java/6.0.6/mysql-connector-java-6.0.6.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>

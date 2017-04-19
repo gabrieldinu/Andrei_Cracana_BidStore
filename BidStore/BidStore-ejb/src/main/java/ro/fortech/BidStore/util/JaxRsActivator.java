@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ro.fortech.BidStore.rest;
+package ro.fortech.BidStore.util;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -27,7 +27,7 @@ import javax.ws.rs.core.Application;
  * Resources are served relative to the servlet path specified in the {@link ApplicationPath} annotation.
  * </p>
  */
-//@ApplicationPath("/rest")
+@ApplicationPath("/rest")
 public class JaxRsActivator extends Application {
     /* class body intentionally left blank */
 }

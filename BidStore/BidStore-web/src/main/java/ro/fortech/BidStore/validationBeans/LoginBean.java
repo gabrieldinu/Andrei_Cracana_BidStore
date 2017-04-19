@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @SessionScoped
 public class LoginBean implements Serializable {
 	
+	@SuppressWarnings("unused")
 	@Inject
     private FacesContext facesContext;
 
