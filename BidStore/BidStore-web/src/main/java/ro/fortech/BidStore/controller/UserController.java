@@ -3,6 +3,7 @@ package ro.fortech.BidStore.controller;
 import java.io.Serializable;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import ro.fortech.BidStore.model.RegistrationModel;
 import ro.fortech.BidStore.rest.RegistrationModelREST;
 import ro.fortech.BidStore.service.RegistrationService;
+import ro.fortech.BidStore.util.WebResources;
 import ro.fortech.BidStore.validationBeans.LoginBean;
 import ro.fortech.BidStore.validationBeans.RegisterBean;
 
@@ -53,7 +55,7 @@ public class UserController implements Serializable {
 		registrationModelREST.setUser(registerBean.getUser());
 		registrationModelREST.setPassword(registerBean.getPassword());
 
-		WebTarget registrationServiceREST = restClient.target("http://localhost:8080//BidStore-web/rest/registration/register");
+		WebTarget registrationServiceREST = restClient.target(WebResources.rootAddress + "/rest/registration/register");
 		
 		String registerResponse = registrationServiceREST.request(MediaType.TEXT_PLAIN).post(Entity.entity(registrationModelREST, MediaType.APPLICATION_XML),String.class);
 		
@@ -70,7 +72,7 @@ public class UserController implements Serializable {
 	
 	public String loginUserREST() {
 		
-		WebTarget registrationServiceREST = restClient.target("http://localhost:8080//BidStore-web/rest/registration/login");
+		WebTarget registrationServiceREST = restClient.target(WebResources.rootAddress + "/rest/registration/login");
 		
 //		registrationServiceREST.queryParam("username", loginBean.getUsername());
 //		registrationServiceREST.queryParam("password", loginBean.getPassword());
@@ -114,12 +116,31 @@ public class UserController implements Serializable {
 		String loginResponse = registrationService.login(loginBean.getUsername(),loginBean.getPassword());
 		
 		if (loginResponse.equals("")) {
+			loginBean.setLoggedIn(true);
 			return "index";
 		}
 		else {
 			facesContext.addMessage(null, new FacesMessage(loginResponse));
+			loginBean.setLoggedIn(false);
 			return "login";
 		}
 
 	}
+	
+	public String logOutUser() {
+		loginBean.setLoggedIn(false);
+		return "login";
+	}
+	
+	public String isLoggedIn() {
+		
+		if (loginBean.getLoggedIn()) {
+			return "";
+		}
+		else {
+			facesContext.addMessage(null, new FacesMessage("Oops! You are not logged in!"));
+			return "login";
+		}
+	}
+
 }

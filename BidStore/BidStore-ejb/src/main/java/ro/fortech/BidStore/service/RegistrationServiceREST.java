@@ -13,13 +13,16 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import ro.fortech.BidStore.model.Login;
@@ -38,12 +41,20 @@ public class RegistrationServiceREST {
 	 @Resource(mappedName = "java:jboss/mail/gmail")
 	 private Session mailSession;
 	 
+	 private final static Random rG = new Random();
+	 
+	 private final static String rootAddress = "http://192.168.215.106:8080/BidStore-web";
+	 
 	 
 	 private String randomString(final int length) {
-		    Random r = new Random(); // perhaps make it a class variable so you don't make a new one every time
 		    StringBuilder sb = new StringBuilder();
 		    for(int i = 0; i < length; i++) {
-		        char c = (char)(r.nextInt((int)(Character.MAX_VALUE)));
+		        char c = (char)(48+rG.nextInt(10)+rG.nextInt(2)*( //if nextInt(2) is 0 here, a digit will be generated ASCII 48-57
+		        								17+rG.nextInt(17)+rG.nextInt(2)* //if nextInt(2) is 0 here, a big char will be generated ASCII 65-90
+		        										32	//if all nextInt(2) are 1, a small char will be generated ASCII 97-122
+		        										
+		        								)
+		        				);
 		        sb.append(c);
 		    }
 		    return sb.toString();
@@ -51,24 +62,18 @@ public class RegistrationServiceREST {
 	 
 	 private String createEmailContent(Login loginEntity) {
 		 String content = "Welcome, ";
-		 content += loginEntity.getTableProfile().getName() + " " + loginEntity.getTableProfile().getSurname() + "!\n";
+		 content += loginEntity.getTableProfile().getName() + " " + loginEntity.getTableProfile().getSurname() + "!\n\n";
 		 content += "Your account is: " + loginEntity.getUser() +"\n";
 		 content += "In order to activate it and verify your email address, please click the following link:\n";
-		 content += "link \n";
+		 content += rootAddress + "/rest/registration/activate?code=" + loginEntity.getCode() +" \n\n";
 		 content += "Best regards!\n";
 		 content += "BidStore Team";
 		 return content;
 	 }
 	 
-	 @SuppressWarnings("unused")
-	private void sendEmail(Login loginEntity) {
+	 private void sendEmail(Login loginEntity) throws MessagingException {
 		 	String to = loginEntity.getTableProfile().getEmail();
 		 	String from = "andrei91c@gmail.com";
-//		 	String host = "localhost";
-//		 	Properties properties = System.getProperties();
-//		 	properties.setProperty("mail.smtp.host", host);
-//		 	//implement email sending, misssing Mail API, can't create Session
-//		 	Session session = Session.getDefaultInstance(properties);
 		 	
 		 	try {
 		 		MimeMessage message = new MimeMessage(mailSession);
@@ -82,6 +87,34 @@ public class RegistrationServiceREST {
 		 		log.info("Sending message failed!");
 		 		mex.printStackTrace();
 		 	}
+	 }
+	 
+	 @GET
+	 @Path("/activate")
+	 @Transactional
+	 public String activate(@QueryParam(value="code") String code) {
+		 
+		 TypedQuery<Login> activateQuery = em.createNamedQuery(Login.FIND_BY_CODE, Login.class);
+		 activateQuery.setParameter("code", code);
+		 
+		 try 
+		 {
+			 Login loginToActivate = activateQuery.getSingleResult();
+			 if (loginToActivate.getChecked()) return "Your email was already verified!";
+			 else {
+				 loginToActivate.setChecked(true);
+				 em.persist(loginToActivate);
+			 }
+			 return "Your email has been succesfully verified and your account is now activated!";
+		 }
+		 catch (NoResultException e) {
+			 e.printStackTrace();
+			 return "Your activation code is invalid or not found!";
+		 }
+		 catch (PersistenceException e) {
+			 e.printStackTrace();
+			 return "There was a problem activating your account!";
+		 }
 	 }
 	 
 	 @POST
@@ -111,14 +144,13 @@ public class RegistrationServiceREST {
     	//insert into table
     	try {
     		em.persist(loginEntity);
+    		sendEmail(loginEntity);
     	}
     	catch (Exception e) {
     		e.printStackTrace();
     		return false;
     	}
-    	
-    	//sendEmail(loginEntity);
-    	
+  
     	return true;
 	 }
 	 

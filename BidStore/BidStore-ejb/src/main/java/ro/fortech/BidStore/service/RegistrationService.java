@@ -32,12 +32,18 @@ public class RegistrationService {
 	 @Resource(mappedName = "java:jboss/mail/gmail")
 	 private Session mailSession;
 	 
+	 private final static Random rG = new Random();
+	 
 	 
 	 private String randomString(final int length) {
-		    Random r = new Random(); // perhaps make it a class variable so you don't make a new one every time
 		    StringBuilder sb = new StringBuilder();
 		    for(int i = 0; i < length; i++) {
-		        char c = (char)(r.nextInt((int)(Character.MAX_VALUE)));
+		        char c = (char)(48+rG.nextInt(10)+rG.nextInt(2)*( //if nextInt(2) is 0 here, a digit will be generated ASCII 48-57
+		        								17+rG.nextInt(17)+rG.nextInt(2)* //if nextInt(2) is 0 here, a big char will be generated ASCII 65-90
+		        										32	//if all nextInt(2) are 1, a small char will be generated ASCII 97-122
+		        										
+		        								)
+		        				);
 		        sb.append(c);
 		    }
 		    return sb.toString();

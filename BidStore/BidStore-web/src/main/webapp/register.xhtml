@@ -12,24 +12,39 @@
 				<h:form>
 				    <p:panel header="REGISTER">
 				    
-				        <p:messages />
+<!-- 				        <p:messages /> -->
 				 
-				        <h:panelGrid columns="2" cellpadding="5">
+				        <h:panelGrid columns="4" cellpadding="5">
 				        
 				            <h:outputLabel for="name" value="First name:" />
 				            <p:inputText id="name" value="#{vvRegisterBean.name}" label="Name" pt:required="true" />
+				            <p:message for="name" />
+           			 		<h:outputText value="(a-z;A-Z)" />
 				 
 				            <h:outputLabel for="surname" value="Last name:" />
 				            <p:inputText id="surname" value="#{vvRegisterBean.surname}" label="Surname" pt:required="true" />
+				            <p:message for="surname" />
+           			 		<h:outputText value="(a-z;A-Z)" />
 				 
 				            <h:outputLabel for="email" value="Email address:" />
 				            <p:inputText id="email" value="#{vvRegisterBean.email}" label="Email" pt:required="true" />
+				            <p:message for="email" />
+           			 		<h:outputText value="(azAZ09_.)@(azAZ09_).(azAZ09.)" />
 				 
 				            <h:outputLabel for="user" value="Username:" />
 				            <p:inputText id="user" value="#{vvRegisterBean.user}" label="User" pt:required="true" />
+				            <p:message for="user" />
+           			 		<h:outputText value="(a-z;A-Z;0-9;_;.)" />
 				 
 				            <h:outputLabel for="password" value="Password:" />
-				            <p:inputText type="password" id="password" value="#{vvRegisterBean.password}" label="Password" pt:required="true" />
+				            <p:password id="password" value="#{vvRegisterBean.password}" match="retypepass" label="Password" pt:required="true" />
+				            <p:message for="password" redisplay="false" />
+           			 		<h:outputText value="(a-z;A-Z;0-9)" />
+           			 		
+           			 		<h:outputLabel for="retypepass" value="Retype Password:" />
+				            <p:password id="retypepass" label="Retype Password" pt:required="true" />
+				            <p:message for="retypepass" />
+           			 		<h:outputText value="(must match with Password)" />
 				 
 <!-- 				            <h:outputLabel for="password" value="Repeat password:"/>                                 -->
 <!-- 				            <p:inputText id="password" value="#{vvRegisterBean.password}" label="Password" /> -->

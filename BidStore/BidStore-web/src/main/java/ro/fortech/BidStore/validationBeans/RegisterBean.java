@@ -5,6 +5,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Named(value="vvRegisterBean")
 @SuppressWarnings("serial")
@@ -16,14 +18,24 @@ public class RegisterBean implements Serializable {
     private FacesContext facesContext;
 
 //REGISTER fields start
+	@Size(max=50, message="Name is too long! (max 50 char)")
+	@Pattern(regexp="[a-zA-Z]+", message="Your name can only contain letters!")
 	private String name;
 	
+	@Size(max=50, message="Surname is too long! (max 50 char)")
+	@Pattern(regexp="[a-zA-Z]+", message="Your surname can only contain letters!")
 	private String surname;
 	
+	@Size(max=100, message="Email is too long! (max 100)")
+	@Pattern(regexp="[a-zA-Z0-9_.]+@[a-zA-Z0-9_]+.[a-zA-Z0-9.]+", message="Your email must have an email pattern!")
 	private String email;
 	
+	@Size(max=50, message="Username is too long! (max 50 char)")
+	@Pattern(regexp="[a-zA-Z0-9]+", message="Your username can only contain letters, digits, underscore and dot!")
 	private String user;
 	
+	@Size(max=50, message="Pasword is too long! (max 50 char)")
+	@Pattern(regexp="[a-zA-Z0-9]+", message="Your password can only contain letters and digits!")
 	private String password;
 //REGISTER fields end
 	

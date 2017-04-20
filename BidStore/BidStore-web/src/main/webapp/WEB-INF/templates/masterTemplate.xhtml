@@ -15,8 +15,13 @@
     </h:head>
 
     <h:body>
-    <ui:include src="header.xhtml"/>
     
+    <f:view>
+    	<ui:insert name="metadata" />
+    </f:view>
+		
+    <ui:include src="header.xhtml"/>
+    	    	
     	<ui:insert name="menu" />
         <ui:insert name="content" />
         

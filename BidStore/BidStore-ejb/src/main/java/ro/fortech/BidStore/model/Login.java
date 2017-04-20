@@ -9,10 +9,14 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="table_login")
-@NamedQuery(name=Login.FIND_BY_USERNAME, query="SELECT l FROM Login l WHERE l.user = :username")
+@NamedQueries({
+		@NamedQuery(name=Login.FIND_BY_USERNAME, query="SELECT l FROM Login l WHERE l.user = :username"),
+		@NamedQuery(name=Login.FIND_BY_CODE, query="SELECT l FROM Login l WHERE l.code = :code")
+})
 public class Login {
 	
 	public static final String FIND_BY_USERNAME = "Login.findByUsername";
+	public static final String FIND_BY_CODE = "Login.findByCode";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

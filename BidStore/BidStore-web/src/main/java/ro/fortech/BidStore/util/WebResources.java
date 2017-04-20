@@ -33,6 +33,8 @@ import javax.faces.context.FacesContext;
  * </pre>
  */
 public class WebResources {
+	
+	public final static String rootAddress = "http://192.168.215.106:8080/BidStore-web";
 
     @Produces
     @RequestScoped

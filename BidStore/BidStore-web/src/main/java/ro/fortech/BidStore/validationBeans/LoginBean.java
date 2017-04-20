@@ -6,7 +6,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Named(value="vvLoginBean")
 @SuppressWarnings("serial")
@@ -18,11 +19,15 @@ public class LoginBean implements Serializable {
     private FacesContext facesContext;
 
 // LOGIN fields start
-	@NotNull(message = "Username can't be blank!")
+	@Size(max=50, message="Username is too long! (max 50 char)")
+	@Pattern(regexp="[a-zA-Z0-9]+", message="Your username can only contain letters, digits, underscore and dot!")
 	private String username;
 	
-	@NotNull(message = "Password can't be blank!")
+	@Size(max=50, message="Pasword is too long! (max 50 char)")
+	@Pattern(regexp="[a-zA-Z0-9]+", message="Your password can only contain letters and digits!")
 	private String password;
+	
+	private boolean loggedIn;
 // LOGIN field end
 	
 	public String getUsername() {
@@ -40,9 +45,13 @@ public class LoginBean implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	public String login() {
-		return "index";
+
+	public boolean getLoggedIn() {
+		return loggedIn;
+	}
+
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
 	}
 	
 }
