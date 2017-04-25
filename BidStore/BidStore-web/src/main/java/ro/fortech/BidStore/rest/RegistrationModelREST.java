@@ -1,9 +1,12 @@
 package ro.fortech.BidStore.rest;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
+@SuppressWarnings("serial")
 @XmlRootElement
-public class RegistrationModelREST {
+public class RegistrationModelREST implements Serializable {
 
 	private String name;
 	

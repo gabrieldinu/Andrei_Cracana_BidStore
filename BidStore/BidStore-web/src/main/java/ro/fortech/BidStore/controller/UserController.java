@@ -2,7 +2,8 @@ package ro.fortech.BidStore.controller;
 
 import java.io.Serializable;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -14,16 +15,16 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 
-import ro.fortech.BidStore.model.RegistrationModel;
+//import ro.fortech.BidStore.model.RegistrationModel;
 import ro.fortech.BidStore.rest.RegistrationModelREST;
-import ro.fortech.BidStore.service.RegistrationService;
+//import ro.fortech.BidStore.service.RegistrationService;
 import ro.fortech.BidStore.util.WebResources;
 import ro.fortech.BidStore.validationBeans.LoginBean;
 import ro.fortech.BidStore.validationBeans.RegisterBean;
 
 @Named(value="userController")
 @SuppressWarnings("serial")
-@RequestScoped
+@SessionScoped
 public class UserController implements Serializable {
 
 	@Inject
@@ -35,11 +36,11 @@ public class UserController implements Serializable {
 	@Inject
 	private LoginBean loginBean;
 	
-	@Inject
-	private RegistrationModel registrationModel;
-	
-	@Inject
-	private RegistrationService registrationService;
+//	@Inject
+//	private RegistrationModel registrationModel;
+//	
+//	@Inject
+//	private RegistrationService registrationService;
 	
 	@Inject 
 	RegistrationModelREST registrationModelREST;
@@ -83,40 +84,10 @@ public class UserController implements Serializable {
 		String loginResponse = registrationServiceREST.request(MediaType.TEXT_PLAIN).post(Entity.form(loginForm), String.class);
 		
 		if (loginResponse.equals("")) {
-			return "index";
-		}
-		else {
-			facesContext.addMessage(null, new FacesMessage(loginResponse));
-			return "login";
-		}
-
-	}
-	
-	public String registerUser() {
-		registrationModel.setName(registerBean.getName());
-		registrationModel.setSurname(registerBean.getSurname());
-		registrationModel.setEmail(registerBean.getEmail());
-		registrationModel.setUser(registerBean.getUser());
-		registrationModel.setPassword(registerBean.getPassword());
-		
-		if (registrationService.register(registrationModel)) 
-		{
-			facesContext.addMessage(null, new FacesMessage("Register succeded! An email has been sent to you in order to confirm your account!"));
-			return "login";
-		}
-		else {
-			facesContext.addMessage(null, new FacesMessage("Register failed! Please try again!"));
-			return "register";
-		}
-	}
-	
-	public String loginUser() {
-		
-		String loginResponse = registrationService.login(loginBean.getUsername(),loginBean.getPassword());
-		
-		if (loginResponse.equals("")) {
+			System.out.println("SUNT LOGAT SAU NU?" + (loginBean.getLoggedIn()?"DA":"NU"));
 			loginBean.setLoggedIn(true);
-			return "index";
+			System.out.println("SUNT LOGAT SAU NU?" + (loginBean.getLoggedIn()?"DA":"NU"));
+			return "secured/index.xhtml?faces-redirect=true";
 		}
 		else {
 			facesContext.addMessage(null, new FacesMessage(loginResponse));
@@ -126,20 +97,45 @@ public class UserController implements Serializable {
 
 	}
 	
-	public String logOutUser() {
-		loginBean.setLoggedIn(false);
-		return "login";
-	}
+//	public String registerUser() {
+//		registrationModel.setName(registerBean.getName());
+//		registrationModel.setSurname(registerBean.getSurname());
+//		registrationModel.setEmail(registerBean.getEmail());
+//		registrationModel.setUser(registerBean.getUser());
+//		registrationModel.setPassword(registerBean.getPassword());
+//		
+//		if (registrationService.register(registrationModel)) 
+//		{
+//			facesContext.addMessage(null, new FacesMessage("Register succeded! An email has been sent to you in order to confirm your account!"));
+//			return "login";
+//		}
+//		else {
+//			facesContext.addMessage(null, new FacesMessage("Register failed! Please try again!"));
+//			return "register";
+//		}
+//	}
+//	
+//	public String loginUser() {
+//		
+//		String loginResponse = registrationService.login(loginBean.getUsername(),loginBean.getPassword());
+//		
+//		if (loginResponse.equals("")) {
+//			loginBean.setLoggedIn(true);
+//			return "secured/index.xhtml?faces-redirect=true";
+//		}
+//		else {
+//			facesContext.addMessage(null, new FacesMessage(loginResponse));
+//			loginBean.setLoggedIn(false);
+//			return "login";
+//		}
+//
+//	}
 	
-	public String isLoggedIn() {
-		
-		if (loginBean.getLoggedIn()) {
-			return "";
-		}
-		else {
-			facesContext.addMessage(null, new FacesMessage("Oops! You are not logged in!"));
-			return "login";
-		}
+	public String logOutUser() {
+		System.out.println("SUNT LOGAT SAU NU?" + (loginBean.getLoggedIn()?"DA":"NU"));
+		loginBean.setLoggedIn(false);
+		System.out.println("SUNT LOGAT SAU NU?" + (loginBean.getLoggedIn()?"DA":"NU"));
+		return "../login.xhtml?faces-redirect=true";
 	}
 
 }
