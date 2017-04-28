@@ -19,12 +19,12 @@
 				            <h:outputLabel for="username" value="Username:" title="Insert your BIDSTORE username" />
 				            <p:inputText id="username" value="#{vvLoginBean.username}" label="Userame" pt:required="true" />
 				            <p:message for="username" />
-           			 		<h:outputText value="(a-z;A-Z;0-9;_;.) #{vvLoginBean.username}" />
+           			 		<h:outputText value="(a-z;A-Z;0-9;_;.)" />
 				 
 				            <h:outputLabel for="password" value="Password:" title="Insert your associated password" />
 				            <p:inputText type="password" id="password" value="#{vvLoginBean.password}" label="Password" pt:required="true" />
 				 			<p:message for="password" />
-           			 		<h:outputText value="(a-z;A-Z;0-9) #{vvLoginBean.password}" />
+           			 		<h:outputText value="(a-z;A-Z;0-9)" />
            			 		
 				        </h:panelGrid>
 				 

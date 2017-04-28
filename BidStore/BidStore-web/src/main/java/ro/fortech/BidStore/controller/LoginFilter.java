@@ -2,6 +2,8 @@ package ro.fortech.BidStore.controller;
 
 import java.io.IOException;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -23,7 +25,7 @@ import ro.fortech.BidStore.validationBeans.LoginBean;
 public class LoginFilter implements Filter {
 	
 	@Inject
-	LoginBean loginBean;
+	private LoginBean loginBean;
 
     /**
      * Default constructor. 
@@ -45,11 +47,12 @@ public class LoginFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// Get the loginBean from session attribute
 //        LoginBean loginBean = (LoginBean)((HttpServletRequest)request).getSession().getAttribute("loginBean");
-         
+        System.out.println("Filtering request...");
         // For the first application request there is no loginBean in the session so user needs to log in
         // For other requests loginBean is present but we need to check if user has logged in successfully
         if (loginBean == null || !loginBean.getLoggedIn()) {
             String contextPath = ((HttpServletRequest)request).getContextPath();
+            System.out.println("User not logged in. Redirrecting to login page!");
             ((HttpServletResponse)response).sendRedirect(contextPath + "/login.xhtml");
         }
         chain.doFilter(request, response);

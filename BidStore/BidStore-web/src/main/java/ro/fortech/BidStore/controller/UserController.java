@@ -62,11 +62,11 @@ public class UserController implements Serializable {
 		if (registerResponse.equalsIgnoreCase("true")) 
 		{
 			facesContext.addMessage(null, new FacesMessage("REST Register succeded! An email has been sent to you in order to confirm your account!"));
-			return "login";
+			return "login.xhtml?faces-redirect=true";
 		}
 		else {
 			facesContext.addMessage(null, new FacesMessage("REST Register failed! Please try again!"));
-			return "register";
+			return "register.xhtml?faces-redirect=true";
 		}
 	}
 	
@@ -91,8 +91,7 @@ public class UserController implements Serializable {
 		}
 		else {
 			facesContext.addMessage(null, new FacesMessage(loginResponse));
-			loginBean.setLoggedIn(false);
-			return "login";
+			return "login.xhtml?faces-redirect=true";
 		}
 
 	}
@@ -133,9 +132,9 @@ public class UserController implements Serializable {
 	
 	public String logOutUser() {
 		System.out.println("SUNT LOGAT SAU NU?" + (loginBean.getLoggedIn()?"DA":"NU"));
-		loginBean.setLoggedIn(false);
+		facesContext.getExternalContext().invalidateSession();
 		System.out.println("SUNT LOGAT SAU NU?" + (loginBean.getLoggedIn()?"DA":"NU"));
-		return "../login.xhtml?faces-redirect=true";
+		return "/login.xhtml?faces-redirect=true";
 	}
 
 }
