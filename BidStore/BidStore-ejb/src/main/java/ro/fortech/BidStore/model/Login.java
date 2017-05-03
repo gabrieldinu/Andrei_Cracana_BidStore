@@ -1,5 +1,7 @@
 package ro.fortech.BidStore.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.*;
 
 
@@ -11,12 +13,14 @@ import javax.persistence.*;
 @Table(name="table_login")
 @NamedQueries({
 		@NamedQuery(name=Login.FIND_BY_USERNAME, query="SELECT l FROM Login l WHERE l.user = :username"),
-		@NamedQuery(name=Login.FIND_BY_CODE, query="SELECT l FROM Login l WHERE l.code = :code")
+		@NamedQuery(name=Login.FIND_BY_CODE, query="SELECT l FROM Login l WHERE l.code = :code"),
+		@NamedQuery(name=Login.DELETE_NOT_ACTIVATED_ON_TIME, query="DELETE FROM Login l WHERE l.checked = false AND l.expiration <= :expiration")
 })
 public class Login {
 	
 	public static final String FIND_BY_USERNAME = "Login.findByUsername";
 	public static final String FIND_BY_CODE = "Login.findByCode";
+	public static final String DELETE_NOT_ACTIVATED_ON_TIME = "Login.deleteNotActivated";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +38,9 @@ public class Login {
 
 	@Column(name="login_user")
 	private String user;
+	
+	@Column(name="login_expiration")
+	private Timestamp expiration;
 
 	//bi-directional one-to-one association to Profile
 	@OneToOne(cascade=CascadeType.ALL)
@@ -81,6 +88,14 @@ public class Login {
 
 	public void setUser(String user) {
 		this.user = user;
+	}
+	
+	public Timestamp getExpiration() {
+		return this.expiration;
+	}
+
+	public void setExpiration(Timestamp expiration) {
+		this.expiration = expiration;
 	}
 
 	public Profile getTableProfile() {

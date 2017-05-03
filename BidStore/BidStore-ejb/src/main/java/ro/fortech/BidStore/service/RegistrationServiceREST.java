@@ -1,5 +1,6 @@
 package ro.fortech.BidStore.service;
 
+import java.sql.Timestamp;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -14,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
@@ -44,6 +46,8 @@ public class RegistrationServiceREST {
 	 private final static Random rG = new Random();
 	 
 	 private final static String rootAddress = "http://192.168.215.106:8080/BidStore-web";
+	 
+	 private final static long ONE_DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
 	 
 	 
 	 private String randomString(final int length) {
@@ -139,6 +143,7 @@ public class RegistrationServiceREST {
     	loginEntity.setPass(registrationModel.getPassword());
     	loginEntity.setChecked(false);
     	loginEntity.setCode(randomString(20));
+    	loginEntity.setExpiration(new Timestamp(System.currentTimeMillis() + ONE_DAY_IN_MILLIS));
     	loginEntity.setTableProfile(profileEntity);
     	
     	//insert into table
@@ -177,4 +182,12 @@ public class RegistrationServiceREST {
 		 }
 	 }
 	 
+	 public void clearDB(Timestamp ts) {
+		 log.info("Entering cleaner!");
+		 Query cleanQuery = em.createNamedQuery(Login.DELETE_NOT_ACTIVATED_ON_TIME);
+		 cleanQuery.setParameter("expiration", ts);
+		 int delRec = cleanQuery.executeUpdate();
+		 log.info(delRec + " records successfully deleted!");
+		 log.info("Exiting cleaner!");
+	 }
 }

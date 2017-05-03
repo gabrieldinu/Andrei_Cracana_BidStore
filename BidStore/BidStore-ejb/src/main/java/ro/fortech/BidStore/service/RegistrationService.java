@@ -29,13 +29,21 @@ public class RegistrationService {
 	 @Inject
 	 private EntityManager em;
 	 
+	 //for testing purposes, getters and setters
+	 EntityManager getEntityManager() {return this.em;}
+	 void setEntityManager(EntityManager em) {this.em = em;}
+	 
 	 @Resource(mappedName = "java:jboss/mail/gmail")
 	 private Session mailSession;
+	 
+	//for testing purposes, getters and setters
+	 Session getMailSession() {return this.mailSession;}
+	 void setMailSession(Session session) {this.mailSession = session;}
 	 
 	 private final static Random rG = new Random();
 	 
 	 
-	 private String randomString(final int length) {
+	 protected String randomString(final int length) {
 		    StringBuilder sb = new StringBuilder();
 		    for(int i = 0; i < length; i++) {
 		        char c = (char)(48+rG.nextInt(10)+rG.nextInt(2)*( //if nextInt(2) is 0 here, a digit will be generated ASCII 48-57
@@ -84,7 +92,6 @@ public class RegistrationService {
 	 }
 	 
 	 public boolean register(RegistrationModel registrationModel) {
-    	log.info("Registering new member!");
     	//create new login user
     	Login loginEntity = new Login();
     	
