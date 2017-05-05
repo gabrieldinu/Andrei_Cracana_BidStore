@@ -9,12 +9,23 @@
 	<ui:composition template="masterTemplate.xhtml">
 		
 		<ui:define name="menu">
-			    <p:menubar>
-			        <f:facet name="options">
-			            <p:outputLabel value="You are logged in as #{vvLoginBean.username} "/>
-			            <p:commandButton action="#{userController.logOutUser}" value="Logout" icon="ui-icon-extlink" />
-			        </f:facet>
-			    </p:menubar>
+			    <p:tabMenu activeIndex="#{4-param.i}">
+			    	<p:menuitem value="Account" outcome="account.xtml" icon="ui-icon-person">
+				        <f:param name="i" value="4" />
+				    </p:menuitem>
+				     <p:menuitem value="Users" outcome="users.xtml" icon="ui-icon-person">
+				        <f:param name="i" value="3" />
+				    </p:menuitem>    
+				    <p:menuitem value="Categories" outcome="categories.xtml" icon="ui-icon-folder-open">
+				        <f:param name="i" value="2" />
+				    </p:menuitem>
+				    <p:menuitem value="Items" outcome="items.xtml" icon="ui-icon-suitcase">
+				        <f:param name="i" value="1" />
+				    </p:menuitem>
+				    <p:menuitem value="Bidding" outcome="index.xtml" icon="ui-icon-circle-plus">
+				        <f:param name="i" value="0" />
+				    </p:menuitem>  
+				</p:tabMenu>
 		</ui:define>
 		
 	</ui:composition>
