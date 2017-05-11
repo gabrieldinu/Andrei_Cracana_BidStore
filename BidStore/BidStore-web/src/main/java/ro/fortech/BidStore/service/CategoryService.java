@@ -31,7 +31,7 @@ public class CategoryService {
     	categoryTree.put(8, 2);
     	categoryTree.put(9, 2);
 
-    	TreeNode root = new DefaultTreeNode(new Category("Category"), null);
+    	TreeNode root = new DefaultTreeNode(new Category("Category", "0"), null);
     	
     	List<TreeNode> categorylist = new ArrayList<TreeNode>();
     	categorylist.add(root);

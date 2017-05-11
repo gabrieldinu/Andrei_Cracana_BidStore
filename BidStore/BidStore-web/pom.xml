@@ -52,7 +52,7 @@
       <dependency>
 		  <groupId>org.primefaces</groupId>
 		  <artifactId>primefaces</artifactId>
-		  <version>6.0</version>
+		  <version>6.1</version>
 	   </dependency>
 
       <!-- Dependency on the EJB module so we can use it's services if needed -->

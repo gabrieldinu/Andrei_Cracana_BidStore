@@ -11,6 +11,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+
+import org.primefaces.event.MenuActionEvent;
 import org.primefaces.event.NodeCollapseEvent;
 import org.primefaces.event.NodeExpandEvent;
 import org.primefaces.event.NodeSelectEvent;
@@ -85,11 +87,45 @@ public class EventsView implements Serializable {
         nh=getNodeHierarchy(nh, event.getTreeNode());
         for (TreeNode node : nh) {
         	System.out.println("ADAUG NOD");
-        	breadcrumbModel.addElement(new DefaultMenuItem(node.toString()));
+        	DefaultMenuItem dmi = new DefaultMenuItem(node.toString());
+        	dmi.setAjax(true);
+        	dmi.setCommand("#{treeEventsView.onNodeSelect}");
+        	dmi.setUpdate(":categoryForm :searchForm:breadcrumb :categorySelected :categoryDescription");
+        	breadcrumbModel.addElement(dmi);
+        }
+    }
+    
+    public void onNodeSelect(MenuActionEvent event) {
+    	breadcrumbModel = new DefaultMenuModel();
+        breadcrumbModel.addElement(new DefaultMenuItem("root"));
+        List<TreeNode> nh = new ArrayList<TreeNode>();
+        identifySelectedNodeFromBreadcrumb(event.getMenuItem().getValue().toString());
+        nh=getNodeHierarchy(nh, selectedNode);
+        for (TreeNode node : nh) {
+        	DefaultMenuItem dmi = new DefaultMenuItem(node.toString());
+        	dmi.setAjax(true);
+        	dmi.setCommand("#{treeEventsView.onNodeSelect}");
+        	dmi.setUpdate(":categoryForm:categoryTree :searchForm:breadcrumb :categorySelected :categoryDescription");
+        	breadcrumbModel.addElement(dmi);
         }
     }
  
-    public void onNodeUnselect(NodeUnselectEvent event) {
+    private void identifySelectedNodeFromBreadcrumb(String value) {
+    	do {
+    		if(selectedNode.getData().toString().equals(value)) {
+    			selectedNode.setSelected(true);
+    			break;
+    		}
+    		else {
+    			selectedNode.setSelected(false);
+    			selectedNode = selectedNode.getParent();
+    		}
+    	}
+    	while (!selectedNode.getParent().toString().equals("Category"));	
+	}
+
+	public void onNodeUnselect(NodeUnselectEvent event) {
+    	System.out.println("UNSELECT NOD");
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Unselected", event.getTreeNode().toString());
         FacesContext.getCurrentInstance().addMessage(null, message);
         breadcrumbModel = new DefaultMenuModel();

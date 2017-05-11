@@ -5,52 +5,144 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
   	  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
-
-	<ui:composition template="/WEB-INF/templates/menuTemplate.xhtml">	
-	
-		<ui:define name="content">
-			
+  	  
+	<ui:composition template="/WEB-INF/templates/menuTemplate.xhtml">		
+		<ui:define name="content">			
 			<p:layout style="min-width:400px;height:87%;">
+			
 			    <p:layoutUnit position="west" size="25%">
-			        <h:form id="categoryForm">
+			    <p:layout>	
+			    		        
+			        <p:layoutUnit position="center" size="60%" resizable="true">
+			        	<f:facet name="header">Categories</f:facet>
+			        	
+			        	
+			        	<h:form id="categoryForm">
 					    <p:growl id="messages" showDetail="true" />
-					    <p:tree id="categoryTree" style="width:99%" value="#{treeEventsView.root}" var="doc" selectionMode="single" selection="#{treeEventsView.selectedNode}">
+					    <p:tree id="categoryTree" style="width:99%;height:98%; border-style:hidden;" value="#{treeEventsView.root}" var="ctgr" selectionMode="single" selection="#{treeEventsView.selectedNode}">
+					    
 					        <p:ajax event="expand" update=":categoryForm:messages" listener="#{treeEventsView.onNodeExpand}" />
 					        <p:ajax event="collapse" update=":categoryForm:messages" listener="#{treeEventsView.onNodeCollapse}" />
-					        <p:ajax event="select" update=":categoryForm:messages :breadcrumbForm" listener="#{treeEventsView.onNodeSelect}" />
+					        <p:ajax event="select" update=":categoryForm:messages :searchForm:breadcrumb :categorySelected :categoryDescription" listener="#{treeEventsView.onNodeSelect}" />
 					        <p:ajax event="unselect" update=":categoryForm:messages" listener="#{treeEventsView.onNodeUnselect}" />
 					 
 					        <p:treeNode expandedIcon="ui-icon-circle-minus" collapsedIcon="ui-icon-circle-plus">
-					            <h:outputText value="#{doc.name}"/>
+					            <h:outputText value="#{ctgr.name}"/>
 					        </p:treeNode>
 					        <p:treeNode type="last" icon="ui-icon-bullet">
-					            <h:outputText value="#{doc.name}" />
+					            <h:outputText value="#{ctgr.name}" />
 					        </p:treeNode>
+					        
 					    </p:tree>
-					</h:form> 
+					    </h:form>
+					    
+					    
+					</p:layoutUnit>
+					
+					<p:layoutUnit position="south" size="40%" resizable="true" style="overflow:auto;">						    
+						<f:facet name="header">
+							<p:outputLabel id="categorySelected" value="#{treeEventsView.selectedNode}" />
+						</f:facet>
+						<p:outputLabel id="categoryDescription" value="#{treeEventsView.selectedNode.data.description}" />
+					</p:layoutUnit> 
+					  					
+				</p:layout>	 
 			    </p:layoutUnit>
 			 
 			    <p:layoutUnit position="center">
-			    	<h:form>
-			        		<div class="ui-g">
-			        			<div class="ui-g-4">
-			   		        	<p:commandButton type="button" value="Search for category" icon="ui-icon-folder-open" />
-			   		        	</div>
-			   		        	<div class="ui-g-4 right-text">
-			   		        	<p:outputLabel value="Search for item:" />
-			   		        	</div>
-			   		        	<div class="ui-g-4">
-					            <p:inputText style="" placeholder="Search" />
-					            </div>
-					        </div>
-			        </h:form>
-			        <h:form id="breadcrumbForm">
-			        <p:breadCrumb model="#{treeEventsView.breadcrumbModel}" rendered="#{treeEventsView.breadcrumbModel != null}" />
-			        </h:form>
+			    <p:layout>
+				    <p:layoutUnit position="north" size="14%">
+				    	<h:form id="searchForm">
+				    	
+					    <div class="ui-g">
+							<div class="ui-g-4">
+								<p:commandButton type="button" value="Search for category" icon="ui-icon-folder-open" />
+						   	</div>
+					  		<div class="ui-g-4 right-text">
+						  		<p:outputLabel value="Search for item:" />
+					  		 </div>
+					   		 <div class="ui-g-4">
+							 	<p:inputText id="globalFilter" placeholder="&#x1F50D; Search" onkeyup="PF('biddableItemsList').filter()" />
+							 </div>
+						</div>	 
+							               
+						<p:breadCrumb id="breadcrumb" model="#{treeEventsView.breadcrumbModel}" rendered="#{treeEventsView.breadcrumbModel != null}" />
+				 
+				 		</h:form>
+				    </p:layoutUnit>
+			    
+				    <p:layoutUnit position="center" size="86%">
+				    	<h:form id="itemForm">
+				    
+				    		    <p:dataList id="itemList" value="#{dataListView.items}" var="biddableItem" widgetVar="biddableItemsList"
+				    		    type="definition" rows="10" itemStyleClass=""
+				    		    paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"
+						        currentPageReportTemplate="Page {currentPage} of {totalPages}"
+						        paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} Page size: {RowsPerPageDropdown} {PaginatorCustomContent}"
+						        rowsPerPageTemplate="5,10,15,20,25,30,35,40,45,50"
+						        selectionMode="single" selection="#{dataListView.selectedItem}" rowKey="#{biddableItem.id}"
+						        emptyMessage="No items found!" filteredValue="#{dataListView.filteredItems}" 
+						        sortBy="#{biddableItem.name}" sortOrder="#{dataListView.sortOrder}"
+				    		     itemType="none" styleClass="paginated">
+							        
+							        <p:commandLink update=":itemForm:itemDetail" oncomplete="PF('itemDialog').show()" value="#{biddableItem.name}" >
+							            <f:setPropertyActionListener value="#{biddableItem}" target="#{dataListView.selectedItem}" />
+							            <h:outputText value="#{biddableItem.id}, #{biddableItem.name}, #{biddableItem.photo}, #{biddableItem.description}, #{biddableItem.bestBidValue}, #{biddableItem.bidClosingDate}, #{biddableItem.numberOfBids}" />
+							        </p:commandLink>
+							        
+							        <f:facet name="description">
+							        <h:outputText value="#{biddableItem.id}, #{biddableItem.name}, #{biddableItem.photo}, #{biddableItem.description}, #{biddableItem.bestBidValue}, #{biddableItem.bidClosingDate}, #{biddableItem.numberOfBids}" style="display:inline-block"/>
+							        </f:facet>
+							        
+								 	<f:facet name="{PaginatorCustomContent}">
+										<p:outputLabel value="Sort by: " for="sortby"/>
+							            <p:selectOneMenu id="sortby" value="#{dataListView.sortColumn}" style="margin-top:10px;width:150px">
+							                <f:selectItem itemLabel="Select Column" itemValue="" noSelectionOption="true"/>
+							                <f:selectItems value="#{dataListView.sortBy}" />
+							            </p:selectOneMenu>
+										<p:outputLabel value="Sort ascending: "/>
+										<p:selectBooleanCheckbox value="#{dataListView.sortAsc}">
+											<p:ajax update=":itemForm" listener="#{dataListView.changeSortOrder}" />
+										</p:selectBooleanCheckbox>
+									</f:facet>
+							        
+							    </p:dataList>
+							
+								    <p:dialog header="Item Info" widgetVar="itemDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+									        <p:outputPanel id="itemDetail" style="text-align:center;">
+									            <p:panelGrid  columns="2" rendered="#{not empty dataListView.selectedItem}" columnClasses="label,value">								 
+									           
+  			  										<h:outputText value="Id:" />
+									                <h:outputText value="#{dataListView.selectedItem.id}" />
+									 
+									                <h:outputText value="Name:" />
+									                <h:outputText value="#{dataListView.selectedItem.name}" />
+									 
+									                <h:outputText value="Photo:" />
+									                <h:outputText value="#{dataListView.selectedItem.photo}" />
+									 
+									                <h:outputText value="Description:" />
+									                <h:outputText value="$#{dataListView.selectedItem.description}" />
+									                
+									                <h:outputText value="Best bid value:" />
+									                <h:outputText value="$#{dataListView.selectedItem.bestBidValue}" />
+									                
+									                <h:outputText value="Bid closing date:" />
+									                <h:outputText value="$#{dataListView.selectedItem.bidClosingDate}" />
+									                
+									                <h:outputText value="Number of bids:" />
+									                <h:outputText value="$#{dataListView.selectedItem.numberOfBids}" />
+									                
+									            </p:panelGrid>
+									        </p:outputPanel>
+									    </p:dialog>
+    
+						</h:form>	
+					</p:layoutUnit>
+				</p:layout>			        
 			    </p:layoutUnit>
-			</p:layout>
-			
-		</ui:define>	
-		
+			    
+			</p:layout>			
+		</ui:define>			
 	</ui:composition>
 </h:html>
