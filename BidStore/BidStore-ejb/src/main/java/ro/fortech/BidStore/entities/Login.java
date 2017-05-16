@@ -1,4 +1,4 @@
-package ro.fortech.BidStore.model;
+package ro.fortech.BidStore.entities;
 
 import java.sql.Timestamp;
 

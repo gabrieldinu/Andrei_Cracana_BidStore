@@ -27,8 +27,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import ro.fortech.BidStore.model.Login;
-import ro.fortech.BidStore.model.Profile;
+import ro.fortech.BidStore.entities.Login;
+import ro.fortech.BidStore.entities.Profile;
 import ro.fortech.BidStore.model.RegistrationModelREST;
 
 @Path("/registration")

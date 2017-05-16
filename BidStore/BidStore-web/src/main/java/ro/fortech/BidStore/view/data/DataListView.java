@@ -38,30 +38,25 @@ public class DataListView implements Serializable {
     private boolean sortAscending;
     
     private Map<String,String> sortBy;
-    String sortColumn;   
-    String sortOrder;
     
     @ManagedProperty("#{itemService}")
     private ItemService service;
  
     @PostConstruct
     public void init() {
-    	//get items
-        items = service.createItems(50);
-        
+    	
         //pagination
         rowsPerPage = 10;
         pageRange = 10;
         
         //sort
-        //sortField = "id";
+        sortField = "id";
         sortAscending = true;
         
         //sort old
         sortBy = new HashMap<String,String>();
         for (Field field : Item.class.getDeclaredFields()) sortBy.put(field.getName(),field.getName());
-        
-        sortOrder = "ascending";
+        loadDataList();
     }
     
     //Paging options
@@ -105,16 +100,17 @@ public class DataListView implements Serializable {
         pageFirst(); // Go to first page and load requested page.
     }
     
+    public void changeSortOrder() {
+    	loadDataList();
+    }
+    
     //Loader
     private void loadDataList() {
 
         // Load list and totalCount.
-//        try {
-//            dataList = dao.list(firstRow, rowsPerPage, sortField, sortAscending);
-//            totalRows = dao.count();
-//        } catch (DAOException e) {
-//            throw new RuntimeException(e); // Handle it yourself.
-//        }
+        items = service.list(firstRow, rowsPerPage, sortField, sortAscending);
+        totalRows = service.count();
+
     	
 
         // Set currentPage, totalPages and pages.
@@ -188,30 +184,19 @@ public class DataListView implements Serializable {
 		this.sortBy = sortBy;
 	}
 
-	public String getSortColumn() {
-		return sortColumn;
-	}
-
-	public void setSortColumn(String sortColumn) {
-		this.sortColumn = sortColumn;
-	}
-
-	public boolean isSortAsc() {
+	public boolean isSortAscending() {
 		return sortAscending;
 	}
 
-	public void setSortAsc(boolean sortAsc) {
+	public void setSortAscending(boolean sortAsc) {
 		this.sortAscending = sortAsc;
 	}
-	public void changeSortOrder(){
-		sortOrder = sortAscending ? "ascending" : "descending";
+	
+	public String getSortField() {
+		return sortField;
 	}
-
-	public String getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(String sortOrder) {
-		this.sortOrder = sortOrder;
+	
+	public void setSortField(String sortField) {
+		this.sortField = sortField;
 	}
 }

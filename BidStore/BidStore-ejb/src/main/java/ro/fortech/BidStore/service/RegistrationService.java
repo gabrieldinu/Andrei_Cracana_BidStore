@@ -16,8 +16,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
-import ro.fortech.BidStore.model.Login;
-import ro.fortech.BidStore.model.Profile;
+import ro.fortech.BidStore.entities.Login;
+import ro.fortech.BidStore.entities.Profile;
 import ro.fortech.BidStore.model.RegistrationModel;
 
 @Stateless

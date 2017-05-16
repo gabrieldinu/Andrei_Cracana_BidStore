@@ -9,68 +9,109 @@
 	<ui:composition template="/WEB-INF/templates/menuTemplate.xhtml">	
 	
 		<ui:define name="content">
-			
-			<p:layout style="min-width:400px;height:87%;">
-			    <p:layoutUnit position="west" size="25%">
-			        <h:form>
-					    <p:growl autoUpdate="true"/>
+		<p:layout style="min-width:400px;height:87%;">
+			<p:layoutUnit position="west" size="25%">
+			    <p:layout>	
+			    		        
+			        <p:layoutUnit position="center" size="60%" resizable="true">
+			        	<f:facet name="header">Categories</f:facet>
+			        	
+			        	<h:form id="categoryForm">
+					    <p:growl id="messages" showDetail="true" />
+					    <p:tree id="categoryTree" style="width:99%;height:98%; border-style:hidden;" value="#{treeEventsView.root}" var="ctgr" selectionMode="single" selection="#{treeEventsView.selectedNode}">
+					    
+					        <p:ajax event="expand" update=":categoryForm:messages" listener="#{treeEventsView.onNodeExpand}" />
+					        <p:ajax event="collapse" update=":categoryForm:messages" listener="#{treeEventsView.onNodeCollapse}" />
+					        <p:ajax event="select" update=":categoryForm:messages :searchForm :categorySelected :categoryDescription :newCategoryForm" listener="#{treeEventsView.onNodeSelect}" />
+					        <p:ajax event="unselect" update=":categoryForm:messages" listener="#{treeEventsView.onNodeUnselect}" />
 					 
-					    <p:panelMenu style="width:100%">
-					        <p:submenu label="Ajax Menuitems">
-					        		<p:submenu label="Save.." style="width:80%;margin-left:20%">
-					        			<p:menuitem value="Save" actionListener="#{menuView.save}" icon="ui-icon-disk" />
-					        			<p:menuitem value="Save as..." actionListener="#{menuView.save}" icon="ui-icon-disk" />
-					        		</p:submenu>
-					            
-					            
-					            <p:menuitem value="Update" actionListener="#{menuView.update}"  icon="ui-icon-arrowrefresh-1-w" />
-					        </p:submenu>
-					        <p:submenu label="Non-Ajax Menuitem">
-					            <p:menuitem value="Delete" actionListener="#{menuView.delete}"  ajax="false" icon="ui-icon-close"/>
-					        </p:submenu>
-					        <p:separator />
-					        <p:submenu label="Navigations" >
-					            <p:submenu label="Links" icon="ui-icon-extlink">
-					                <p:submenu label="PrimeFaces" icon="ui-icon-heart">
-					                    <p:menuitem value="Home" url="http://www.primefaces.org" icon="ui-icon-home" />
-					                    <p:menuitem value="Docs" url="http://www.primefaces.org/documentation" icon="ui-icon-document" />
-					                    <p:menuitem value="Download" url="http://www.primefaces.org/downloads" icon="ui-icon-arrowthick-1-s" />
-					                    <p:menuitem value="Support" url="http://www.primefaces.org/support" icon="ui-icon-wrench" />
-					                </p:submenu>
-					            </p:submenu>
-					            <p:menuitem value="Mobile" outcome="index.xtml" icon="ui-icon-signal" />
-					        </p:submenu>
-					    </p:panelMenu>
-					</h:form>
+					        <p:treeNode expandedIcon="ui-icon-circle-minus" collapsedIcon="ui-icon-circle-plus">
+					            <h:outputText value="#{ctgr.name}"/>
+					        </p:treeNode>
+					        <p:treeNode type="last" icon="ui-icon-bullet">
+					            <h:outputText value="#{ctgr.name}" />
+					        </p:treeNode>
+					        
+					    </p:tree>
+					    </h:form>
+					    
+					    
+					</p:layoutUnit>
+					
+					<p:layoutUnit position="south" size="40%" resizable="true" style="overflow:auto;">						    
+						<f:facet name="header">
+							<p:outputLabel id="categorySelected" value="#{treeEventsView.selectedNode}" />
+						</f:facet>
+						<p:outputLabel id="categoryDescription" value="#{treeEventsView.selectedNode.data.description}" />
+					</p:layoutUnit> 
+					  					
+				</p:layout>	 
 			    </p:layoutUnit>
 			 
 			    <p:layoutUnit position="center">
-			    	<h:form>
-			        		<div class="ui-g">
-			        			<div class="ui-g-4">
-			   		        	<p:commandButton type="button" value="Search for category" icon="ui-icon-folder-open" />
-			   		        	</div>
-			   		        	<div class="ui-g-4 right-text">
-			   		        	<p:outputLabel value="Search for item:" />
-			   		        	</div>
-			   		        	<div class="ui-g-4">
-					            <p:inputText style="" placeholder="Search" />
-					            </div>
-					        </div>
-			        </h:form>
-			        <p:breadCrumb>
-					    <p:menuitem value="Categories" url="#" />
-					    <p:menuitem value="Sports" url="#" />
-					    <p:menuitem value="Basketball" url="#" />
-					    <p:menuitem value="NBA" url="#" />
-					    <p:menuitem value="Teams" url="#" />
-					    <p:menuitem value="L.A. Lakers" url="#" />
-					    <p:menuitem value="Roster" url="#" />
-					    <p:menuitem value="Kobe Bryant" url="#" />
-					</p:breadCrumb>
+			    <p:layout>
+				    <p:layoutUnit position="north" size="14%">
+				    	<h:form id="searchForm">
+				    	
+					    <div class="ui-g">
+							<div class="ui-g-4">
+								<p:commandButton type="button" value="Search for category" icon="ui-icon-folder-open" />
+						   	</div>
+
+					   		 <div class="ui-g-4">
+							 	<p:selectBooleanButton onLabel="Creating new" onIcon="ui-icon-cancel" offLabel="Create new" offIcon="ui-icon-plus"  value="#{treeEventsView.createNew}" update=":newCategoryForm" >
+							 		<p:ajax update=":newCategoryForm" />
+							 	</p:selectBooleanButton>
+							 </div>
+						</div>	 
+							               
+						<p:breadCrumb id="breadcrumb" model="#{treeEventsView.breadcrumbModel}" rendered="#{treeEventsView.breadcrumbModel != null}" />
+				 
+				 		</h:form>
+				    </p:layoutUnit>
+			    
+				    <p:layoutUnit position="center" size="86%">
+				    	<h:form id="newCategoryForm">
+				    	<div class="ui-g">
+				    		<div class="ui-g-12" />
+				    		
+				    		<div class="ui-g-2">				    
+							<p:outputLabel value="Name:" rendered="#{treeEventsView.selectedNode.selected or treeEventsView.createNew}" />
+							</div>
+							<p:inputText class="ui-g-9" value="#{treeEventsView.selectedNode.data.name}" rendered="#{treeEventsView.selectedNode.selected and !treeEventsView.createNew}" />
+							<p:inputText class="ui-g-9" value="#{treeEventsView.newName}" rendered="#{treeEventsView.createNew}" />
+				
+							
+							<div class="ui-g-12" />
+							
+							<div class="ui-g-2">		    
+							<p:outputLabel value="Description:" rendered="#{treeEventsView.selectedNode.selected or treeEventsView.createNew}" />
+							</div>
+							<p:inputTextarea class="ui-g-9" maxlength="2000" rows="20" value="#{treeEventsView.selectedNode.data.description}" rendered="#{treeEventsView.selectedNode.selected and !treeEventsView.createNew}" />
+							<p:inputTextarea class="ui-g-9" maxlength="2000" rows="20" value="#{treeEventsView.newDescription}" rendered="#{treeEventsView.createNew}" />
+
+							
+							<div class="ui-g-12" />
+							<div class="ui-g-12" />
+							<div class="ui-g-12" />
+							
+							<div class="ui-g-3" />
+							<div class="ui-g-3">
+							<p:commandButton value="Save (update)" update=":categoryForm :searchForm :newCategoryForm" actionListener="#{treeEventsView.updateCategory}" rendered="#{treeEventsView.selectedNode.selected and !treeEventsView.createNew}" />
+							<p:commandButton value="Save (new)" update=":categoryForm :searchForm :newCategoryForm" actionListener="#{treeEventsView.addCategory}" rendered="#{treeEventsView.createNew}" />
+							</div>
+							<div class="ui-g-3">
+							<p:commandButton value="Remove" update=":categoryForm :searchForm :newCategoryForm" actionListener="#{treeEventsView.removeCategory}" rendered="#{treeEventsView.selectedNode.selected and !treeEventsView.createNew}" />
+							</div>
+							<div class="ui-g-3" />
+						</div>
+						</h:form>	
+					</p:layoutUnit>
+					
+				</p:layout>			        
 			    </p:layoutUnit>
-			</p:layout>
-			
+			    
+		</p:layout>
 		</ui:define>	
 		
 	</ui:composition>
