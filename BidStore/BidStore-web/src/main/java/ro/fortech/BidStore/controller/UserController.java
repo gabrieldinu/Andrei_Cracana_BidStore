@@ -81,10 +81,19 @@ public class UserController implements Serializable {
 		loginForm.param("password", loginBean.getPassword());
 		
 		String loginResponse = registrationServiceREST.request(MediaType.TEXT_PLAIN).post(Entity.form(loginForm), String.class);
+		System.out.println(loginResponse);
 		
 		if (loginResponse.equals("")) {
 			System.out.println("SUNT LOGAT SAU NU?" + (loginBean.getLoggedIn()?"DA":"NU"));
 			loginBean.setLoggedIn(true);
+			loginBean.setAdmin(false);
+			System.out.println("SUNT LOGAT SAU NU?" + (loginBean.getLoggedIn()?"DA":"NU"));
+			return "secured/index.xhtml?faces-redirect=true";
+		}
+		else if (loginResponse.equals("admin")) {
+			System.out.println("SUNT LOGAT SAU NU?" + (loginBean.getLoggedIn()?"DA":"NU"));
+			loginBean.setLoggedIn(true);
+			loginBean.setAdmin(true);
 			System.out.println("SUNT LOGAT SAU NU?" + (loginBean.getLoggedIn()?"DA":"NU"));
 			return "secured/index.xhtml?faces-redirect=true";
 		}

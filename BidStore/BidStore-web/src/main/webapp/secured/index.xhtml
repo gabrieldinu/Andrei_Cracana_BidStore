@@ -105,6 +105,7 @@
 							<p:selectOneMenu value="#{dataListView.rowsPerPage}" style="margin-top:10px;" >
 								<f:selectItem itemLabel="5" itemValue="5" />
 								<f:selectItem itemLabel="10" itemValue="10" />
+								<f:selectItem itemLabel="15" itemValue="15" />
 								<f:selectItem itemLabel="25" itemValue="25" />
 								<f:selectItem itemLabel="50" itemValue="50" />
 								<p:ajax event="change" update=":itemForm :paginationForm" listener="#{dataListView.changeSortOrder}" />

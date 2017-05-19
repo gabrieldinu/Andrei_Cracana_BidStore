@@ -9,7 +9,12 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="table_profile")
+@NamedQueries({
+	@NamedQuery(name=Profile.GET_USER_LIST, query="SELECT p FROM Profile p")
+})
 public class Profile {
+	
+	public final static String GET_USER_LIST = "Profile.getUserList";
 
 	@Id
 	private int profileId;

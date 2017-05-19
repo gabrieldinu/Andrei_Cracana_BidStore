@@ -11,54 +11,70 @@
 		<ui:define name="content">
 			
 			<p:layout style="min-width:400px;height:87%;">
-			<p:layoutUnit position="center" size="100%">
+			<p:layoutUnit position="west" size="50%">
 				<h:form>
-				    <p:panel header="Your account" styleClass="center-text">
+				    <p:panel header="Basic account info" styleClass="center-text">
 				    
 <!-- 				        <p:messages /> -->
-				 
+				 		
+				 		<p:graphicImage value="/resources/gfx/error404.jpg" width="50%" height="50%" />
+				 		
+				 		<p:separator  />
+				 		
 				        <h:panelGrid columns="4" cellpadding="5" >
-				        
+				        	
 				            <h:outputLabel for="name" value="First name:" />
-				            <p:inputText id="name" value="#{vvRegisterBean.name}" label="Name" pt:required="true" />
+				            <p:inputText id="name" value="#{accountView.account.name}" label="Name" pt:required="true" />
 				            <p:message for="name" />
            			 		<h:outputText value="(a-z;A-Z)" />
 				 
 				            <h:outputLabel for="surname" value="Last name:" />
-				            <p:inputText id="surname" value="#{vvRegisterBean.surname}" label="Surname" pt:required="true" />
+				            <p:inputText id="surname" value="#{accountView.account.surname}" label="Surname" pt:required="true" />
 				            <p:message for="surname" />
            			 		<h:outputText value="(a-z;A-Z)" />
 				 
 				            <h:outputLabel for="email" value="Email address:" />
-				            <p:inputText id="email" value="#{vvRegisterBean.email}" label="Email" pt:required="true" />
+				            <p:inputText id="email" value="#{accountView.account.email}" label="Email" pt:required="true" />
 				            <p:message for="email" />
            			 		<h:outputText value="(azAZ09_.)@(azAZ09_).(azAZ09.)" />
 				 
-				            <h:outputLabel for="user" value="Username:" />
-				            <p:inputText id="user" value="#{vvRegisterBean.user}" label="User" pt:required="true" />
-				            <p:message for="user" />
-           			 		<h:outputText value="(a-z;A-Z;0-9;_;.)" />
-				 
-				            <h:outputLabel for="password" value="Password:" />
-				            <p:password id="password" value="#{vvRegisterBean.password}" match="retypepass" label="Password" pt:required="true" />
-				            <p:message for="password" redisplay="false" />
+				            <h:outputLabel for="newPass" value="New Password:" />
+				            <p:password id="newPass" value="#{accountView.account.password}" match="retypepass" label="Password" pt:required="true" />
+				            <p:message for="newPass" redisplay="false" />
            			 		<h:outputText value="(a-z;A-Z;0-9)" />
            			 		
            			 		<h:outputLabel for="retypepass" value="Retype Password:" />
 				            <p:password id="retypepass" label="Retype Password" pt:required="true" />
 				            <p:message for="retypepass" />
-           			 		<h:outputText value="(must match with Password)" />
-				 
-<!-- 				            <h:outputLabel for="password" value="Repeat password:"/>                                 -->
-<!-- 				            <p:inputText id="password" value="#{vvRegisterBean.password}" label="Password" /> -->
-				 
+           			 		<h:outputText value="(must match with New Password)" />
+				 				 
 				        </h:panelGrid>
 				 
-				        <p:commandButton action="#{userController.registerUserREST}" value="Save" ajax="false" icon="ui-icon-check" validateClient="true"/>
+				 		<p:separator />
+				 		
+				        <p:commandButton action="#" value="Update" ajax="false" icon="ui-icon-check" validateClient="true"/>
 
 				    </p:panel>
 				</h:form>
 			</p:layoutUnit>
+			<p:layoutUnit position="center" size="50%">
+				<h:form>
+				    <p:carousel value="#{accountView.account.addressList}" var="address" headerText="Your addresses: " 
+				    numVisible="1" firstVisible="0" dropdownTemplate="{Page}">
+				    
+				    	<p:outputLabel class="ui-g-6" value="Street: " />
+				    	<p:inputText class="ui-g-6" value="#{address.street}" />
+				    	
+				    	<p:outputLabel class="ui-g-6" value="Zipcode: " />
+				    	<p:inputText class="ui-g-6" value="#{address.zipcode}" />
+				    	
+				    	<p:outputLabel class="ui-g-6" value="City: " />
+				    	<p:inputText class="ui-g-6" value="#{address.city}" />
+				    	
+				    </p:carousel>
+				</h:form>
+			</p:layoutUnit>
+			
 			</p:layout>
 			
 		</ui:define>	

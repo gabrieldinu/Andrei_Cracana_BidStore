@@ -41,7 +41,13 @@ public class Login {
 	
 	@Column(name="login_expiration")
 	private Timestamp expiration;
-
+	
+	@Column(name="login_admin")
+	private boolean admin;
+	
+	@Column(name="login_enabled")
+	private boolean enabled;
+	
 	//bi-directional one-to-one association to Profile
 	@OneToOne(cascade=CascadeType.ALL)
 	@PrimaryKeyJoinColumn
@@ -104,5 +110,21 @@ public class Login {
 
 	public void setTableProfile(Profile tableProfile) {
 		this.tableProfile = tableProfile;
+	}
+
+	public boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
+	public boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 }

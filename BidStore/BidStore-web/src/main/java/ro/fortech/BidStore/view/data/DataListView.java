@@ -15,6 +15,7 @@ import javax.faces.event.ActionEvent;
 
 import ro.fortech.BidStore.domain.Item;
 import ro.fortech.BidStore.service.ItemService;
+import ro.fortech.BidStore.view.AccountView;
  
 @ManagedBean
 @SessionScoped
@@ -57,6 +58,7 @@ public class DataListView implements Serializable {
         sortBy = new HashMap<String,String>();
         for (Field field : Item.class.getDeclaredFields()) sortBy.put(field.getName(),field.getName());
         loadDataList();
+
     }
     
     //Paging options

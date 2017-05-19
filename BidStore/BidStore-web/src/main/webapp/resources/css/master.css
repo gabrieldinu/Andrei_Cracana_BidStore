@@ -18,7 +18,7 @@ h3 {
 
 body {
 	margin: 0;
-	background-color: #D8DAD3;
+	background-color: #D8DAD3; 
 	height: 100%;
 	width: 100%;
 	position: absolute;
@@ -65,3 +65,10 @@ div#center-box {
 .ui-datatable.borderless tbody td {
 	border-style:	none;	
 }
+
+.ui-paginator-bottom {
+	position: fixed;
+	bottom: 24px;
+	right: 0;
+	left: 0;
+} 

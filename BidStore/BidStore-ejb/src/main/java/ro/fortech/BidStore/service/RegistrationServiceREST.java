@@ -144,6 +144,8 @@ public class RegistrationServiceREST {
     	loginEntity.setChecked(false);
     	loginEntity.setCode(randomString(20));
     	loginEntity.setExpiration(new Timestamp(System.currentTimeMillis() + ONE_DAY_IN_MILLIS));
+    	loginEntity.setAdmin(false);
+    	loginEntity.setEnabled(true);
     	loginEntity.setTableProfile(profileEntity);
     	
     	//insert into table
@@ -174,6 +176,8 @@ public class RegistrationServiceREST {
 			 Login loginToVerify = verifyQuery.getSingleResult();
 			 if (!loginToVerify.getChecked()) return "Your email has not been verified! REST";
 			 if (!loginToVerify.getPass().equals(password)) return "Your password is incorect! REST";
+			 if (!loginToVerify.getEnabled()) return "Your account has been disabled by the admins! REST";
+			 if (loginToVerify.getAdmin()) return "admin";
 			 return "";
 		 }
 		 catch (NoResultException e) {

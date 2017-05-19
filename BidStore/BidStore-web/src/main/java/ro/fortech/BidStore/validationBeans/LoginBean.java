@@ -28,6 +28,7 @@ public class LoginBean implements Serializable {
 	private String password;
 	
 	private boolean loggedIn;
+	private boolean admin;
 // LOGIN field end
 	
 	public String getUsername() {
@@ -52,6 +53,14 @@ public class LoginBean implements Serializable {
 
 	public void setLoggedIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
+	}
+
+	public boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 	
 }
