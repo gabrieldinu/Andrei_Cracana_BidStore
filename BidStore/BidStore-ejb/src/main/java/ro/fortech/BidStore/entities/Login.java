@@ -1,6 +1,8 @@
 package ro.fortech.BidStore.entities;
 
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -48,11 +50,20 @@ public class Login {
 	@Column(name="login_enabled")
 	private boolean enabled;
 	
+	@Column(name="login_rank")
+	private int rank;
+	
 	//bi-directional one-to-one association to Profile
 	@OneToOne(cascade=CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	private Profile tableProfile;
 
+	@OneToMany(mappedBy="login", targetEntity=Address.class)
+	private List<Address> adresses;
+	
+	@OneToMany(mappedBy="login", targetEntity=PhoneNumber.class)
+	private List<PhoneNumber> phoneNumbers;
+	
 	public Login() {
 	}
 
@@ -126,5 +137,29 @@ public class Login {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public List<Address> getAdresses() {
+		return adresses;
+	}
+
+	public void setAdresses(List<Address> adresses) {
+		this.adresses = adresses;
+	}
+
+	public List<PhoneNumber> getPhoneNumbers() {
+		return phoneNumbers;
+	}
+
+	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
+		this.phoneNumbers = phoneNumbers;
+	}
+
+	public int getRank() {
+		return rank;
+	}
+
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 }

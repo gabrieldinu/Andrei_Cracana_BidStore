@@ -12,14 +12,14 @@
 			
 			<p:layout style="min-width:400px;height:87%;">
 			<p:layoutUnit position="west" size="50%">
-				<h:form>
+				<h:form id="accountBasicForm">
 				    <p:panel header="Basic account info" styleClass="center-text">
-				    
+				    	<p:inputText value="#{accountView.account.user_id}" type="hidden" />
 <!-- 				        <p:messages /> -->
 				 		
 				 		<p:graphicImage value="/resources/gfx/error404.jpg" width="50%" height="50%" />
 				 		
-				 		<p:separator  />
+				 		<p:separator styleClass="ui-g-12" />
 				 		
 				        <h:panelGrid columns="4" cellpadding="5" >
 				        	
@@ -39,40 +39,163 @@
            			 		<h:outputText value="(azAZ09_.)@(azAZ09_).(azAZ09.)" />
 				 
 				            <h:outputLabel for="newPass" value="New Password:" />
-				            <p:password id="newPass" value="#{accountView.account.password}" match="retypepass" label="Password" pt:required="true" />
+				            <p:password id="newPass" value="#{accountView.account.password}" match="retypepass" label="Password" />
 				            <p:message for="newPass" redisplay="false" />
            			 		<h:outputText value="(a-z;A-Z;0-9)" />
            			 		
            			 		<h:outputLabel for="retypepass" value="Retype Password:" />
-				            <p:password id="retypepass" label="Retype Password" pt:required="true" />
+				            <p:password id="retypepass" label="Retype Password" />
 				            <p:message for="retypepass" />
            			 		<h:outputText value="(must match with New Password)" />
 				 				 
 				        </h:panelGrid>
 				 
-				 		<p:separator />
+				 		<p:separator styleClass="ui-g-12" />
 				 		
-				        <p:commandButton action="#" value="Update" ajax="false" icon="ui-icon-check" validateClient="true"/>
+				        <p:commandButton action="#{accountView.updateBasic}" value="Update" update=":accountBasicForm" icon="ui-icon-check" validateClient="true"/>
 
 				    </p:panel>
 				</h:form>
 			</p:layoutUnit>
 			<p:layoutUnit position="center" size="50%">
-				<h:form>
+				<h:form id="accountAddressForm">
 				    <p:carousel value="#{accountView.account.addressList}" var="address" headerText="Your addresses: " 
-				    numVisible="1" firstVisible="0" dropdownTemplate="{Page}">
-				    
+				    numVisible="1" firstVisible="0" >
+				    	<p:inputText value="#{address.id}" type="hidden" />
+				    	
+				    	<p:outputLabel class="ui-g-12 center-text" value="#{address.name}" />
+				    	
+				    	<p:separator styleClass="ui-g-12" />
+				    	
 				    	<p:outputLabel class="ui-g-6" value="Street: " />
-				    	<p:inputText class="ui-g-6" value="#{address.street}" />
+				    	<p:outputLabel class="ui-g-6" value="#{address.street}" />
 				    	
 				    	<p:outputLabel class="ui-g-6" value="Zipcode: " />
-				    	<p:inputText class="ui-g-6" value="#{address.zipcode}" />
+				    	<p:outputLabel class="ui-g-6" value="#{address.zipcode}" />
 				    	
 				    	<p:outputLabel class="ui-g-6" value="City: " />
-				    	<p:inputText class="ui-g-6" value="#{address.city}" />
+				    	<p:outputLabel class="ui-g-6" value="#{address.city}" />
+				    	
+				    	<p:separator styleClass="ui-g-12" />
+						
+						<div class="ui-g-3" />
+				    	<div class="ui-g-4">
+				    	<p:commandButton action="#{accountView.editAddress}" oncomplete="PF('addressDialog').show()" value="Edit" icon="ui-icon-scissors" update=":accountAddressDialogForm">
+				    		<f:setPropertyActionListener value="#{address}" target="#{accountView.selectedAddress}" />
+				    	</p:commandButton>
+				    	</div>
+
+						<div class="ui-g-5">
+				    	<p:commandButton action="#{accountView.deleteAddress}" value="Delete" icon="ui-icon-minus" update=":accountAddressForm">
+				    		<f:setPropertyActionListener value="#{address}" target="#{accountView.selectedAddress}" />
+				    	</p:commandButton>
+				    	</div>
+				    	
+				    	<f:facet name="footer">
+				    		<div class="ui-g-5" />
+				    		<p:commandButton action="#{accountView.addAddress}" oncomplete="PF('addressDialog').show()" value="Add new" icon="ui-icon-plus" update=":accountAddressDialogForm">
+				    		</p:commandButton>
+				    	</f:facet>
+				    	
+				    </p:carousel>
+
+				</h:form>
+				    
+				  	<p:dialog header="Addess Info" widgetVar="addressDialog" modal="false" showEffect="fade" hideEffect="fade" resizable="false">
+				        
+				        <p:outputPanel id="addressDetail" style="text-align:center;">
+				        <h:form id="accountAddressDialogForm">
+				            <p:panelGrid  columns="2" rendered="#{not empty accountView.newAddress}" >
+				 				
+				 				<p:outputLabel value="Name: " />
+				                <p:inputText value="#{accountView.newAddress.name}" />
+				 				
+				                <p:outputLabel value="Street: " />
+				                <p:inputText value="#{accountView.newAddress.street}" />
+				 
+				                <p:outputLabel value="Zipcode: " />
+				                <p:inputText value="#{accountView.newAddress.zipcode}" />
+				 
+				                <p:outputLabel value="City: " />
+				                <p:inputText value="#{accountView.newAddress.city}" />
+
+								<p:inputText value="#{accountView.newAddress.id}" type="hidden" />
+								<p:inputText value="#{accountView.newAddress.profile_id}" type="hidden" />
+				    		
+				            </p:panelGrid>
+				            	<p:separator />		                
+				    			<p:commandButton actionListener="#{accountView.saveAddress}" oncomplete="PF('addressDialog').hide()"  value="Save" icon="ui-icon-check" update=":accountAddressDialogForm :accountAddressForm">
+				    			</p:commandButton>
+				    	</h:form>		
+				        </p:outputPanel>
+				        
+				    </p:dialog>
+				
+				
+<!-- 				<p:separator styleClass="ui-g-12" /> -->
+<!-- 				<p:separator styleClass="ui-g-12" /> -->
+<!-- 				<p:separator styleClass="ui-g-12" /> -->
+				
+				<h:form id="accountPhoneForm">
+				    <p:carousel value="#{accountView.account.phoneNumberList}" var="phoneNumber" headerText="Your phone numbers: " 
+				    numVisible="1" firstVisible="0" >
+				    	<p:inputText value="#{phoneNumber.id}" type="hidden" />
+				    
+				    	<p:outputLabel class="ui-g-12 center-text" value="#{phoneNumber.name}" />
+				    	
+				    	<p:separator styleClass="ui-g-12" />
+				    	
+				    	<p:outputLabel class="ui-g-6" value="Phone number: " />
+				    	<p:outputLabel class="ui-g-6" value="#{phoneNumber.number}" />
+				    	
+				    	<p:separator styleClass="ui-g-12" />
+
+						<div class="ui-g-3" />
+				    	<div class="ui-g-4">
+				    	<p:commandButton action="#{accountView.editNumber}" oncomplete="PF('phoneNumberDialog').show()" value="Edit" icon="ui-icon-scissors" update=":accountPhoneDialogForm">
+				    			<f:setPropertyActionListener value="#{phoneNumber}" target="#{accountView.selectedNumber}" />
+				    	</p:commandButton>
+				    	</div>
+
+						<div class="ui-g-5">
+				    	<p:commandButton action="#{accountView.deleteNumber}" value="Delete" icon="ui-icon-minus" update=":accountPhoneForm">
+				    			<f:setPropertyActionListener value="#{phoneNumber}" target="#{accountView.selectedNumber}" />
+				    	</p:commandButton>
+				    	</div>
+				    	
+				    	<f:facet name="footer">
+				    		<div class="ui-g-5" />
+					    	<p:commandButton action="#{accountView.addNumber}" oncomplete="PF('phoneNumberDialog').show()" value="Add new" icon="ui-icon-plus" update=":accountPhoneDialogForm">
+					    	</p:commandButton>
+				    	</f:facet>
 				    	
 				    </p:carousel>
 				</h:form>
+				
+					<p:dialog header="Phone Number Info" widgetVar="phoneNumberDialog" modal="false" showEffect="fade" hideEffect="fade" resizable="false">
+				        
+				        <p:outputPanel id="phoneNumberDetail" style="text-align:center;">
+				        <h:form id="accountPhoneDialogForm">
+				            <p:panelGrid  columns="2" rendered="#{not empty accountView.newNumber}" >
+				 				
+				 				<p:outputLabel value="Name: " />
+				                <p:inputText value="#{accountView.newNumber.name}" />
+				 				
+				                <p:outputLabel value="Number: " />
+				                <p:inputText value="#{accountView.newNumber.number}" />
+
+								<p:inputText value="#{accountView.newNumber.id}" type="hidden" />
+								<p:inputText value="#{accountView.newNumber.profile_id}" type="hidden" />
+				    		
+				            </p:panelGrid>
+				            	<p:separator />		                
+				    			<p:commandButton actionListener="#{accountView.saveNumber}" oncomplete="PF('phoneNumberDialog').hide()"  value="Save" icon="ui-icon-check" update=":accountPhoneDialogForm :accountPhoneForm">
+				    			</p:commandButton>
+				    	</h:form>		
+				        </p:outputPanel>
+				        
+				    </p:dialog>
+				    
 			</p:layoutUnit>
 			
 			</p:layout>

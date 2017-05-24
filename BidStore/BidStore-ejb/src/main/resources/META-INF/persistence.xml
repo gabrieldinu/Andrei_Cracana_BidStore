@@ -28,6 +28,10 @@
       <jta-data-source>java:jboss/datasources/BidStoreDS</jta-data-source>
       <class>ro.fortech.BidStore.entities.Login</class>
       <class>ro.fortech.BidStore.entities.Profile</class>
+      <class>ro.fortech.BidStore.entities.Category</class>
+      <class>ro.fortech.BidStore.entities.Address</class>
+      <class>ro.fortech.BidStore.entities.PhoneNumber</class>
+   
       <properties>
          <!-- Properties for Hibernate -->
 <!--          <property name="hibernate.hbm2ddl.auto" value="create-drop" /> -->

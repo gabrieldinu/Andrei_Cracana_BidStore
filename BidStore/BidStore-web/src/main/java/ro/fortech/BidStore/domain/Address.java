@@ -2,10 +2,12 @@ package ro.fortech.BidStore.domain;
 
 public class Address {
 
+	int id;
 	String name;
 	String street;
 	String zipcode;
 	String city;
+	int profile_id;
 	
 	public Address() {
 		
@@ -48,6 +50,22 @@ public class Address {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getProfile_id() {
+		return profile_id;
+	}
+
+	public void setProfile_id(int profile_id) {
+		this.profile_id = profile_id;
 	}
 	
 }

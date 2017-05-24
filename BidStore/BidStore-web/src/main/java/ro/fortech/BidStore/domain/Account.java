@@ -7,7 +7,7 @@ public class Account {
 
 	//login user
 	String user;
-
+	int user_id;
 	
 	//profile info
 	String name;
@@ -92,6 +92,14 @@ public class Account {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public int getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
 	}
 	
 }

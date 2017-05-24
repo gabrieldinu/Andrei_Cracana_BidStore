@@ -2,8 +2,10 @@ package ro.fortech.BidStore.domain;
 
 public class PhoneNumber {
 
+	int id;
 	String name;
 	String number;
+	int profile_id;
 	
 	public PhoneNumber() {
 		
@@ -29,6 +31,22 @@ public class PhoneNumber {
 
 	public void setNumber(String number) {
 		this.number = number;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getProfile_id() {
+		return profile_id;
+	}
+
+	public void setProfile_id(int profile_id) {
+		this.profile_id = profile_id;
 	}
 	
 }
