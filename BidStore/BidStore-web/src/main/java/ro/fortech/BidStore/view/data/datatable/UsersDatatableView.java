@@ -52,4 +52,5 @@ public class UsersDatatableView implements Serializable {
 		if(service.updateUser(selectedUser)) this.init();
 		else FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Can't update user", null));
 	}
+	
 }

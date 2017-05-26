@@ -12,6 +12,10 @@
 		<exception-type>javax.servlet.ServletException</exception-type>
         <location>/general-error.xhtml</location>
     </error-page>
+    <error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/general-error.xhtml</location>
+    </error-page>
     
 <!--     Session configuration -->
 <!-- 	<session-config> -->

@@ -14,61 +14,136 @@
 			<p:layoutUnit position="center" size="100%">
 			
 				<h:form id="itemsForm">
-				    <p:dataTable var="user" value="#{userDatatable.users}"
+					
+					<div class="ui-g">
+						<div class="ui-g-4" />
+						<div class="ui-g-2">
+							<p:outputLabel value="Items to: " />
+							<p:selectOneMenu value="#{itemsDatatable.toSell}">
+								<f:selectItem itemLabel="sell" itemValue="true" />
+								<f:selectItem itemLabel="buy" itemValue="false" />
+								<p:ajax event="change" update=":itemsForm" listener="#{itemsDatatable.switchSellBuy}" />
+							</p:selectOneMenu>
+						</div>
+						<p:commandButton styleClass="ui-g-4" action="#" oncomplete="PF('newItemDialog').show()" update=":newItemDialogForm" value="Define new item" icon="ui-icon-plus" rendered="#{itemsDatatable.toSell}" />			
+					</div>
+					
+					<p:separator />
+					
+				    <p:dataTable var="item" value="#{itemsDatatable.items}"
 				                 rows="10" paginator="true" paginatorPosition="bottom"
 				                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} Page size: {RowsPerPageDropdown}"
 				                 currentPageReportTemplate=" Page {currentPage} of {totalPages} " 
 				                 rowsPerPageTemplate="5,10,15,25,50" rowKey="#{user.id}" style="margin-bottom: 31px;" resizableColumns="true">
 				 			 
-				        <p:column headerText="Id" sortBy="#{user.id}" visible="false">
-				            <h:outputText value="#{user.id}" />
+				        <p:column headerText="Id" sortBy="#{item.id}" visible="false">
+				            <h:outputText value="#{item.id}" />
 				        </p:column>
 				 
-				        <p:column headerText="Name" sortBy="#{user.name}" >
-				            <h:outputText value="#{user.name}" />
+				        <p:column headerText="Name" sortBy="#{item.name}" >
+				            <h:outputText value="#{item.name}" />
 				        </p:column>
 				 
-				        <p:column headerText="Account" sortBy="#{user.account}" >
-				            <h:outputText value="#{user.account}" />
+				        <p:column headerText="Category" sortBy="#{item.category}" >
+				            <h:outputText value="#{item.category}" />
 				        </p:column>
 				 
-						<p:column headerText="Email" sortBy="#{user.email}"  >
-				            <h:outputText value="#{user.email}" />
+						<p:column headerText="Initial price" sortBy="#{item.initialPrice}" width="7%" >
+				            <h:outputText value="#{item.initialPrice}" />
 				        </p:column>
 				        
-				        <p:column headerText="# items placed" sortBy="#{user.itemPlaced}" >
-				            <h:outputText value="#{user.itemPlaced}" />
+				        <p:column headerText="Best bid" sortBy="#{item.bestBidValue}" width="7%" >
+				            <h:outputText value="#{item.bestBidValue}" />
 				        </p:column>
 				        
-				        <p:column headerText="# items sold" sortBy="#{user.itemSold}" >
-				            <h:outputText value="#{user.itemSold}" />
+				        <p:column headerText="Your bid" sortBy="#{item.yourBid}" rendered="#{not itemsDatatable.toSell}" width="7%" >
+				            <h:outputText value="#{item.yourBid}" />
 				        </p:column>
 				        
-				        <p:column headerText="# items bought" sortBy="#{user.itemBought}" >
-				            <h:outputText value="#{user.itemBought}" />
+				        <p:column headerText="# bids" sortBy="#{item.numberOfBids}" width="6%" >
+				            <h:outputText value="#{item.numberOfBids}" />
 				        </p:column>
 				        
-				        <p:column headerText="Is Admin ?" sortBy="#{user.admin}" >
-				            <p:selectBooleanCheckbox value="#{user.admin}">
-					            <p:ajax update=":usersForm" />
-					        </p:selectBooleanCheckbox>
+				        <p:column headerText="opening date" sortBy="#{item.bidOpeningDate}" width="9%" >
+				            <h:outputText value="#{item.bidOpeningDate}">
+				            	<f:convertDateTime pattern="d'th of' MMMMMMMMM yyyy" />
+				            </h:outputText>
 				        </p:column>
 				        
-				        <p:column headerText="Is Enabled ?" sortBy="#{user.enabled}" >
-				            <p:selectBooleanCheckbox value="#{user.enabled}">
-					            <p:ajax update=":usersForm" />
-					        </p:selectBooleanCheckbox>
+				        <p:column headerText="closing date" sortBy="#{item.bidClosingDate}" width="9%" >
+				            <h:outputText value="#{item.bidClosingDate}">
+				            	<f:convertDateTime pattern="d'th of' MMMMMMMMM yyyy" />
+				            </h:outputText>
 				        </p:column>
 				        
-				        <p:column>
-				        	<p:commandButton value="Update it" action="#{userDatatable.updateUser}" update=":usersForm">
-				        		<f:setPropertyActionListener value="#{user}" target="#{userDatatable.selectedUser}" />
+				        <p:column headerText="status" sortBy="#{item.status}" width="8%" >
+				            <h:outputText value="abandoned" rendered="#{item.status == 0}" />
+				            <h:outputText value="closed" rendered="#{item.status == 1}" />
+				            <h:outputText value="not yet open" rendered="#{item.status == 2}" />
+				            <h:outputText value="open" rendered="#{item.status == 3}" />
+				        </p:column>
+				        
+				        <p:column headerText="Winner" sortBy="#{item.winner}" width="7%" >
+				            <h:outputText value="#{item.winner}" />
+				        </p:column>
+				        
+				        <p:column rendered="#{itemsDatatable.toSell}" width="17%">
+				        	<p:commandButton value="Close" action="#" update=":itemsForm">
+				        		<f:setPropertyActionListener value="#{item}" target="#{itemsDatatable.selectedItem}" />
+				        	</p:commandButton>
+				        	
+				    		<p:commandButton value="Abandon" action="#" update=":itemsForm">
+				        		<f:setPropertyActionListener value="#{item}" target="#{itemsDatatable.selectedItem}" />
+				        	</p:commandButton>
+				        	
+				        	<p:commandButton value="Change" action="#" update=":itemsForm">
+				        		<f:setPropertyActionListener value="#{item}" target="#{itemsDatatable.selectedItem}" />
+				        	</p:commandButton>
+				        </p:column>
+				        
+				        <p:column rendered="#{not itemsDatatable.toSell}" width="5%">
+				        	<p:commandButton value="Edit" action="#" update=":itemsForm">
+				        		<f:setPropertyActionListener value="#{item}" target="#{itemsDatatable.selectedItem}" />
 				        	</p:commandButton>
 				        </p:column>
 				        
 				    </p:dataTable>
-				 
 				</h:form>
+				
+				<p:dialog header="Define new item" widgetVar="newItemDialog" modal="false" showEffect="fade" hideEffect="fade" resizable="false" width="50%" height="50%">
+				        
+				        <h:form id="newItemDialogForm">
+				        	<p:wizard flowListener="#{itemsDatatable.onFlowProcess}">
+				   				<p:tab title="Category selection">
+				   					<p:panel header="Please select the category for item's placement: ">
+				   						<p:growl id="messages" showDetail="true" />
+									    <p:tree id="newItemCategoryTree" style="width:99%;height:98%; border-style:hidden;" value="#{itemsDatatable.root}" var="category" selectionMode="single" selection="#{itemsDatatable.selectedNode}">
+									    
+									        <p:ajax event="expand" update=":newItemDialogForm:newItemCategoryTree" listener="#{itemsDatatable.onNodeExpand}" />
+									        <p:ajax event="collapse" update=":newItemDialogForm:newItemCategoryTree" listener="#{itemsDatatable.onNodeCollapse}" />
+									        <p:ajax event="select" update=":newItemDialogForm:newItemCategoryTree" listener="#{itemsDatatable.onNodeSelect}" />
+									        <p:ajax event="unselect" update=":newItemDialogForm:newItemCategoryTree" listener="#{itemsDatatable.onNodeUnselect}" />
+									 
+									        <p:treeNode expandedIcon="ui-icon-circle-minus" collapsedIcon="ui-icon-circle-plus">
+									            <h:outputText value="#{category.name}"/>
+									        </p:treeNode>
+									        <p:treeNode type="last" icon="ui-icon-bullet">
+									            <h:outputText value="#{category.name}" />
+									        </p:treeNode>
+									        
+									    </p:tree>
+				   					</p:panel>
+				   				</p:tab>     	
+				   				
+				   				<p:tab title="Item details">
+				   					<p:panel header="Please select the following item details: ">
+				   						ITEM DETAILS
+				   					</p:panel>
+				   				</p:tab>
+				        	</p:wizard>   
+				    	</h:form>
+				        
+				    </p:dialog>
 				
 			</p:layoutUnit>
 			</p:layout>
