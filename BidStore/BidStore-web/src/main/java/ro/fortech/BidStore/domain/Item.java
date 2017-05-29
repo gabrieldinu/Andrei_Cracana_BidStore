@@ -25,7 +25,7 @@ public class Item {
 	
 	// private int owner - only in entity - foreign key to user/profile
 	
-	Item() {
+	public Item() {
 		
 	}
 	
@@ -147,6 +147,15 @@ public class Item {
 
 	public void setYourBid(int yourBid) {
 		this.yourBid = yourBid;
+	}
+
+	@Override
+	public String toString() {
+		return "Item [id=" + id + ", name=" + name + ", bestBidValue=" + bestBidValue + ", bidClosingDate="
+				+ bidClosingDate + ", numberOfBids=" + numberOfBids + ", category=" + category + ", initialPrice="
+				+ initialPrice + ", bidOpeningDate=" + bidOpeningDate + ", status=" + status + ", winner=" + winner
+				+ ", toSell=" + toSell + ", yourBid=" + yourBid + ", photo=" + photo + ", description=" + description
+				+ "]";
 	}
 	
 }

@@ -25,7 +25,7 @@
 								<p:ajax event="change" update=":itemsForm" listener="#{itemsDatatable.switchSellBuy}" />
 							</p:selectOneMenu>
 						</div>
-						<p:commandButton styleClass="ui-g-4" action="#" oncomplete="PF('newItemDialog').show()" update=":newItemDialogForm" value="Define new item" icon="ui-icon-plus" rendered="#{itemsDatatable.toSell}" />			
+						<p:commandButton styleClass="ui-g-4" action="#{itemsDatatable.defineNew}" oncomplete="PF('newItemDialog').show()" update=":newItemDialogForm" value="Define new item" icon="ui-icon-plus" rendered="#{itemsDatatable.toSell}" />			
 					</div>
 					
 					<p:separator />
@@ -117,18 +117,15 @@
 				   				<p:tab title="Category selection">
 				   					<p:panel header="Please select the category for item's placement: ">
 				   						<p:growl id="messages" showDetail="true" />
-									    <p:tree id="newItemCategoryTree" style="width:99%;height:98%; border-style:hidden;" value="#{itemsDatatable.root}" var="category" selectionMode="single" selection="#{itemsDatatable.selectedNode}">
-									    
-									        <p:ajax event="expand" update=":newItemDialogForm:newItemCategoryTree" listener="#{itemsDatatable.onNodeExpand}" />
-									        <p:ajax event="collapse" update=":newItemDialogForm:newItemCategoryTree" listener="#{itemsDatatable.onNodeCollapse}" />
-									        <p:ajax event="select" update=":newItemDialogForm:newItemCategoryTree" listener="#{itemsDatatable.onNodeSelect}" />
-									        <p:ajax event="unselect" update=":newItemDialogForm:newItemCategoryTree" listener="#{itemsDatatable.onNodeUnselect}" />
+									    <p:tree id="newItemCategoryTree" style="border-style:hidden;" value="#{itemsDatatable.root}" var="ctgr" selectionMode="single" selection="#{itemsDatatable.selectedNode}">
+									         
+									            <p:ajax event="select" listener="#{itemsDatatable.onNodeSelect}" /> 
 									 
 									        <p:treeNode expandedIcon="ui-icon-circle-minus" collapsedIcon="ui-icon-circle-plus">
-									            <h:outputText value="#{category.name}"/>
+									            <h:outputText value="#{ctgr.name}"/>
 									        </p:treeNode>
 									        <p:treeNode type="last" icon="ui-icon-bullet">
-									            <h:outputText value="#{category.name}" />
+									            <h:outputText value="#{ctgr.name}" />
 									        </p:treeNode>
 									        
 									    </p:tree>
@@ -137,7 +134,25 @@
 				   				
 				   				<p:tab title="Item details">
 				   					<p:panel header="Please select the following item details: ">
-				   						ITEM DETAILS
+				   					 	<p:panelGrid styleClass="ui-panelgrid-blank" columns="2">
+				   						<p:outputLabel value="Item name: " />
+				   						<p:inputText value="#{itemsDatatable.newItem.name}" />
+				   						
+				   						<p:outputLabel value="Item description: " />
+				   						<p:inputTextarea value="#{itemsDatatable.newItem.description}" />
+				   						
+				   						<p:outputLabel value="Item initial price: " />
+				   						<p:inputNumber value="#{itemsDatatable.newItem.initialPrice}" decimalPlaces="0" />
+				   						
+				   						<p:outputLabel value="Bidding opening date: " />
+				   						<p:calendar value="#{itemsDatatable.newItem.bidOpeningDate}" showOn="button" pattern="dd.MM.yyy" />
+				   						
+				   						<p:outputLabel value="Bidding closing date: " />
+				   						<p:calendar value="#{itemsDatatable.newItem.bidClosingDate}" showOn="button" pattern="dd.MM.yyy" />
+				   						
+				   						<p:outputLabel value="Item photo: " />
+				   						<p:inputText value="#{itemsDatatable.newItem.photo}" />
+				   						</p:panelGrid>
 				   					</p:panel>
 				   				</p:tab>
 				        	</p:wizard>   
