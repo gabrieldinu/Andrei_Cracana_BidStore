@@ -49,15 +49,21 @@
 				        </p:column>
 				 
 						<p:column headerText="Initial price" sortBy="#{item.initialPrice}" width="7%" >
-				            <h:outputText value="#{item.initialPrice}" />
+				            <h:outputText value="#{item.initialPrice}">
+				            	<f:convertNumber currencySymbol="$" type="currency" />
+				            </h:outputText>
 				        </p:column>
 				        
 				        <p:column headerText="Best bid" sortBy="#{item.bestBidValue}" width="7%" >
-				            <h:outputText value="#{item.bestBidValue}" />
+				            <h:outputText value="#{item.bestBidValue}">
+				            	<f:convertNumber currencySymbol="$" type="currency" />
+				            </h:outputText>
 				        </p:column>
 				        
 				        <p:column headerText="Your bid" sortBy="#{item.yourBid}" rendered="#{not itemsDatatable.toSell}" width="7%" >
-				            <h:outputText value="#{item.yourBid}" />
+				            <h:outputText value="#{item.yourBid}">
+				            	<f:convertNumber currencySymbol="$" type="currency" />
+				            </h:outputText>
 				        </p:column>
 				        
 				        <p:column headerText="# bids" sortBy="#{item.numberOfBids}" width="6%" >
@@ -113,8 +119,8 @@
 				<p:dialog header="Define new item" widgetVar="newItemDialog" modal="false" showEffect="fade" hideEffect="fade" resizable="false" width="50%" height="50%">
 				        
 				        <h:form id="newItemDialogForm">
-				        	<p:wizard flowListener="#{itemsDatatable.onFlowProcess}">
-				   				<p:tab title="Category selection">
+				        	<p:wizard id="itemWizard" flowListener="#{itemsDatatable.onFlowProcess}">
+				   				<p:tab id="firstStep" title="Category selection">
 				   					<p:panel header="Please select the category for item's placement: ">
 				   						<p:growl id="messages" showDetail="true" />
 									    <p:tree id="newItemCategoryTree" style="border-style:hidden;" value="#{itemsDatatable.root}" var="ctgr" selectionMode="single" selection="#{itemsDatatable.selectedNode}">
@@ -142,7 +148,7 @@
 				   						<p:inputTextarea value="#{itemsDatatable.newItem.description}" />
 				   						
 				   						<p:outputLabel value="Item initial price: " />
-				   						<p:inputNumber value="#{itemsDatatable.newItem.initialPrice}" decimalPlaces="0" />
+				   						<p:inputNumber value="#{itemsDatatable.newItem.initialPrice}" symbol="$" symbolPosition="s" decimalSeparator="," thousandSeparator="." decimalPlaces="0" />
 				   						
 				   						<p:outputLabel value="Bidding opening date: " />
 				   						<p:calendar value="#{itemsDatatable.newItem.bidOpeningDate}" showOn="button" pattern="dd.MM.yyy" />
@@ -153,6 +159,42 @@
 				   						<p:outputLabel value="Item photo: " />
 				   						<p:inputText value="#{itemsDatatable.newItem.photo}" />
 				   						</p:panelGrid>
+				   					</p:panel>
+				   				</p:tab>
+				   				
+				   				<p:tab title="Confirmation">
+				   					<p:panel header="Please confirm the creation of item: ">
+				   					 	<p:panelGrid styleClass="ui-panelgrid-blank" columns="2">
+				   						<p:outputLabel value="Item name: " />
+				   						<h:outputText value="#{itemsDatatable.newItem.name}" />
+				   						
+				   						<p:outputLabel value="Item category: " />
+				   						<h:outputText value="#{itemsDatatable.newItem.category}" />
+				   						
+				   						<p:outputLabel value="Item description: " />
+				   						<h:outputText value="#{itemsDatatable.newItem.description}" />
+				   						
+				   						<p:outputLabel value="Item initial price: " />
+				   						<h:outputText value="#{itemsDatatable.newItem.initialPrice}">
+				   							<f:convertNumber currencySymbol="$" type="currency" />
+				   						</h:outputText>
+				   						
+				   						<p:outputLabel value="Bidding opening date: " />
+				   						<h:outputText value="#{itemsDatatable.newItem.bidOpeningDate}">
+							            	<f:convertDateTime pattern="d'th of' MMMMMMMMM yyyy" />
+							            </h:outputText>
+							            
+				   						<p:outputLabel value="Bidding closing date: " />
+				   						<h:outputText value="#{itemsDatatable.newItem.bidClosingDate}">
+							            	<f:convertDateTime pattern="d'th of' MMMMMMMMM yyyy" />
+							            </h:outputText>
+				            
+				   						<p:outputLabel value="Item photo: " />
+				   						<h:outputText value="#{itemsDatatable.newItem.photo}" />
+				   						</p:panelGrid>
+				   						
+				   						<div class="ui-g-9" />
+				   						<p:commandButton value="Save" oncomplete="PF('newItemDialog').hide()" action="#{itemsDatatable.saveNew}" update=":itemsForm :newItemDialogForm" />
 				   					</p:panel>
 				   				</p:tab>
 				        	</p:wizard>   

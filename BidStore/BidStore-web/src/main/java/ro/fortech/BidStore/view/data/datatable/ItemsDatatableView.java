@@ -10,7 +10,9 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.persistence.GeneratedValue;
 
+import org.primefaces.component.wizard.Wizard;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.NodeCollapseEvent;
 import org.primefaces.event.NodeExpandEvent;
@@ -44,6 +46,9 @@ public class ItemsDatatableView implements Serializable {
     private TreeNode selectedNode;
     @ManagedProperty("#{categoryService}")
     private CategoryService serviceTree;
+    
+    @Inject
+    FacesContext facesContext;
     
     public TreeNode getRoot() {
         return root;
@@ -106,6 +111,13 @@ public class ItemsDatatableView implements Serializable {
 		newItem.setToSell(true);
 		System.out.println(newItem);
 	}
+	
+	public void saveNew() {
+		Wizard wizard = (Wizard) facesContext.getViewRoot().findComponent(":newItemDialogForm:itemWizard");
+		wizard.setStep("firstStep");
+		System.out.println(newItem);
+		init();
+	}
 
 	public List<Item> getItems() {
 		return items;
@@ -135,18 +147,11 @@ public class ItemsDatatableView implements Serializable {
 		this.toSell = toSell;
 	}
 	
-	private boolean skip;
-	
     public String onFlowProcess(FlowEvent event) {
-    	System.out.println("onFlowProcess called - skip="+skip);
+    	System.out.println("onFlowProcess called");
     	System.out.println(newItem);
-        if(skip) {
-            skip = false;   //reset in case user goes back
-            return "confirm";
-        }
-        else {
-            return event.getNewStep();
-        }
+    	
+        return event.getNewStep();
     }
 
 	public Item getNewItem() {
